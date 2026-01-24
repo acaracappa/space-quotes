@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Quotes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #0a0a0f;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -2;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center,
+                rgba(0, 0, 0, 0.3) 0%,
+                rgba(0, 0, 0, 0.7) 100%);
+            z-index: -1;
+        }
+
+        .quote-container {
+            text-align: center;
+            max-width: 900px;
+            padding: 60px 40px;
+            background: rgba(10, 10, 20, 0.6);
+            border: 1px solid rgba(100, 200, 255, 0.2);
+            border-radius: 4px;
+            backdrop-filter: blur(10px);
+            box-shadow:
+                0 0 40px rgba(100, 200, 255, 0.1),
+                inset 0 0 60px rgba(100, 200, 255, 0.05);
+            position: relative;
+        }
+
+        .quote-container::before,
+        .quote-container::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-color: rgba(100, 200, 255, 0.5);
+            border-style: solid;
+        }
+
+        .quote-container::before {
+            top: -1px;
+            left: -1px;
+            border-width: 2px 0 0 2px;
+        }
+
+        .quote-container::after {
+            bottom: -1px;
+            right: -1px;
+            border-width: 0 2px 2px 0;
+        }
+
+        .quote {
+            font-size: 2.2rem;
+            font-weight: 300;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 30px rgba(100, 200, 255, 0.3);
+        }
+
+        .quote::before {
+            content: '"';
+            font-size: 4rem;
+            color: rgba(100, 200, 255, 0.4);
+            font-family: 'Orbitron', sans-serif;
+            display: block;
+            margin-bottom: -20px;
+        }
+
+        .author {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(100, 200, 255, 0.8);
+            padding-top: 20px;
+            border-top: 1px solid rgba(100, 200, 255, 0.2);
+            display: inline-block;
+        }
+
+        .author::before {
+            content: '— ';
+        }
+
+        .countdown-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            color: rgba(100, 200, 255, 0.7);
+            background: rgba(10, 10, 20, 0.7);
+            padding: 12px 18px;
+            border: 1px solid rgba(100, 200, 255, 0.2);
+            border-radius: 2px;
+            backdrop-filter: blur(5px);
+        }
+
+        .countdown-label {
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            color: rgba(100, 200, 255, 0.5);
+        }
+
+        .countdown-time {
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            color: rgba(100, 200, 255, 0.8);
+        }
+
+        .loading::after {
+            content: '';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
+        .image-credit {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: right;
+            max-width: 250px;
+        }
+
+        .image-credit a {
+            color: rgba(100, 200, 255, 0.6);
+            text-decoration: none;
+        }
+
+        .image-credit a:hover {
+            color: rgba(100, 200, 255, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <div class="background" id="background"></div>
+    <div class="background-overlay"></div>
+
+    <div class="loading" id="loading">LOADING</div>
+
+    <div class="quote-container" id="quote-container" style="display: none;">
+        <p class="quote" id="quote-text"></p>
+        <p class="author" id="quote-author"></p>
+    </div>
+
+    <div class="countdown-container">
+        <div class="countdown-label">Next Image In</div>
+        <div class="countdown-time" id="countdown">--:--:--</div>
+    </div>
+
+    <div class="image-credit" id="image-credit"></div>
+
+    <script>
+        // Famous space exploration quotes
+        const spaceQuotes = [
+            {
+                quote: "That's one small step for man, one giant leap for mankind.",
+                author: "Neil Armstrong"
+            },
+            {
+                quote: "The Earth is the cradle of humanity, but mankind cannot stay in the cradle forever.",
+                author: "Konstantin Tsiolkovsky"
+            },
+            {
+                quote: "Somewhere, something incredible is waiting to be known.",
+                author: "Carl Sagan"
+            },
+            {
+                quote: "The universe is under no obligation to make sense to you.",
+                author: "Neil deGrasse Tyson"
+            },
+            {
+                quote: "We are all made of star stuff.",
+                author: "Carl Sagan"
+            },
+            {
+                quote: "Space is for everybody. It's not just for a few people in science or math, or for a select group of astronauts.",
+                author: "Christa McAuliffe"
+            },
+            {
+                quote: "The cosmos is within us. We are made of star-stuff. We are a way for the universe to know itself.",
+                author: "Carl Sagan"
+            },
+            {
+                quote: "I don't think the human race will survive the next thousand years, unless we spread into space.",
+                author: "Stephen Hawking"
+            },
+            {
+                quote: "For all its material advantages, the sedentary life has left us edgy, unfulfilled. Even after 400 generations in villages and cities, we haven't forgotten. The open road still softly calls.",
+                author: "Carl Sagan"
+            },
+            {
+                quote: "Earth is a small town with many neighborhoods in a very big universe.",
+                author: "Ron Garan"
+            }
+        ];
+
+        // Curated list of stunning Hubble images (using direct URLs from HubbleSite)
+        const hubbleImages = [
+            {
+                url: "https://stsci-opo.org/STScI-01EVVB1FZ5WCEPB85CXAG5RTN0.png",
+                title: "Pillars of Creation",
+                credit: "NASA, ESA, and the Hubble Heritage Team"
+            },
+            {
+                url: "https://stsci-opo.org/STScI-01GA6KKWG229B16K4Q38CH3BXS.png",
+                title: "Carina Nebula",
+                credit: "NASA, ESA, and STScI"
+            },
+            {
+                url: "https://stsci-opo.org/STScI-01G8GZR18A6CBS9TGQZ7TWHBD1.png",
+                title: "Tarantula Nebula",
+                credit: "NASA, ESA, and STScI"
+            },
+            {
+                url: "https://stsci-opo.org/STScI-01EVSZN2HQQA88DT05V1MKTB8K.png",
+                title: "Eagle Nebula",
+                credit: "NASA, ESA, and the Hubble Heritage Team"
+            },
+            {
+                url: "https://stsci-opo.org/STScI-01EVT0V4JQFG2H00DA2ES8T6QN.png",
+                title: "Orion Nebula",
+                credit: "NASA, ESA, M. Robberto"
+            },
+            {
+                url: "https://stsci-opo.org/STScI-01G52V7GK4KVTXF7Y8X15J0TFQ.png",
+                title: "Phantom Galaxy",
+                credit: "NASA, ESA, and STScI"
+            },
+            {
+                url: "https://stsci-opo.org/STScI-01EVT4YHB1PFMWHMVF2Q53VR85.png",
+                title: "Westerlund 2",
+                credit: "NASA, ESA, the Hubble Heritage Team"
+            }
+        ];
+
+        const STORAGE_KEY = 'spaceQuotes';
+        const ROTATION_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+        function getStoredData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                return JSON.parse(stored);
+            }
+            return null;
+        }
+
+        function storeData(imageIndex, lastRotation) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                imageIndex,
+                lastRotation
+            }));
+        }
+
+        function getCurrentImageIndex() {
+            const stored = getStoredData();
+            const now = Date.now();
+
+            if (!stored) {
+                const index = Math.floor(Math.random() * hubbleImages.length);
+                storeData(index, now);
+                return { index, nextRotation: now + ROTATION_INTERVAL };
+            }
+
+            const timeSinceRotation = now - stored.lastRotation;
+
+            if (timeSinceRotation >= ROTATION_INTERVAL) {
+                // Time to rotate
+                const rotationsPassed = Math.floor(timeSinceRotation / ROTATION_INTERVAL);
+                const newIndex = (stored.imageIndex + rotationsPassed) % hubbleImages.length;
+                const newLastRotation = stored.lastRotation + (rotationsPassed * ROTATION_INTERVAL);
+                storeData(newIndex, newLastRotation);
+                return { index: newIndex, nextRotation: newLastRotation + ROTATION_INTERVAL };
+            }
+
+            return {
+                index: stored.imageIndex,
+                nextRotation: stored.lastRotation + ROTATION_INTERVAL
+            };
+        }
+
+        function formatCountdown(ms) {
+            if (ms < 0) ms = 0;
+            const hours = Math.floor(ms / (1000 * 60 * 60));
+            const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function updateCountdown(nextRotation) {
+            const countdownEl = document.getElementById('countdown');
+            const remaining = nextRotation - Date.now();
+
+            if (remaining <= 0) {
+                // Time to refresh and get new image
+                location.reload();
+                return;
+            }
+
+            countdownEl.textContent = formatCountdown(remaining);
+        }
+
+        function displayQuote() {
+            const randomQuote = spaceQuotes[Math.floor(Math.random() * spaceQuotes.length)];
+            document.getElementById('quote-text').textContent = randomQuote.quote;
+            document.getElementById('quote-author').textContent = randomQuote.author;
+        }
+
+        function loadImage(imageData) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(imageData);
+                img.onerror = () => reject(new Error('Failed to load image'));
+                img.src = imageData.url;
+            });
+        }
+
+        async function init() {
+            const { index, nextRotation } = getCurrentImageIndex();
+            const imageData = hubbleImages[index];
+
+            try {
+                await loadImage(imageData);
+
+                document.getElementById('background').style.backgroundImage = `url('${imageData.url}')`;
+                document.getElementById('image-credit').innerHTML =
+                    `${imageData.title}<br>Credit: ${imageData.credit}<br>
+                    <a href="https://hubblesite.org/images" target="_blank">HubbleSite.org</a>`;
+
+                displayQuote();
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('quote-container').style.display = 'block';
+
+                // Start countdown
+                updateCountdown(nextRotation);
+                setInterval(() => updateCountdown(nextRotation), 1000);
+
+            } catch (error) {
+                console.error('Error loading image:', error);
+                // Fallback to a solid space-themed background
+                document.getElementById('background').style.background =
+                    'linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a0a2a 100%)';
+                displayQuote();
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('quote-container').style.display = 'block';
+
+                updateCountdown(nextRotation);
+                setInterval(() => updateCountdown(nextRotation), 1000);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
