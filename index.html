@@ -188,6 +188,38 @@
         .image-credit a:hover {
             color: rgba(100, 200, 255, 0.9);
         }
+
+        .dev-credit {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dev-credit a {
+            color: rgba(100, 200, 255, 0.6);
+            text-decoration: none;
+        }
+
+        .dev-credit a:hover {
+            color: rgba(100, 200, 255, 0.9);
+        }
+
+        .dev-credit img {
+            height: 20px;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .dev-credit a:hover img {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -207,6 +239,13 @@
     </div>
 
     <div class="image-credit" id="image-credit"></div>
+
+    <div class="dev-credit">
+        Built with Claude Code
+        <a href="https://github.com/acaracappa/space-quotes" target="_blank" title="View on GitHub">
+            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub">
+        </a>
+    </div>
 
     <script>
         // Famous space exploration quotes
