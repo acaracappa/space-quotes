@@ -23,9 +23,139 @@
     <meta name="twitter:title" content="Space Quotes - Daily Inspiration from the Cosmos">
     <meta name="twitter:description" content="Famous space exploration quotes from astronauts and scientists, displayed over stunning Hubble telescope imagery.">
     <meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg/1200px-Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg">
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>" type="image/svg+xml">
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Performance hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://upload.wikimedia.org">
+    <link rel="dns-prefetch" href="https://upload.wikimedia.org">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Structured Data: WebSite -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Space Quotes",
+        "url": "https://spacequotes.org/",
+        "description": "Famous space exploration quotes from astronauts and scientists like Neil Armstrong, Carl Sagan, and Stephen Hawking. Displayed over stunning Hubble telescope imagery that changes daily.",
+        "inLanguage": "en"
+    }
+    </script>
+
+    <!-- Structured Data: Quotes Collection -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Space Quotes - Daily Inspiration from the Cosmos",
+        "description": "Famous space exploration quotes from astronauts and scientists, displayed over stunning Hubble telescope imagery that changes daily.",
+        "url": "https://spacequotes.org/",
+        "mainEntity": {
+            "@type": "ItemList",
+            "name": "Famous Space Exploration Quotes",
+            "numberOfItems": 10,
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "item": {
+                        "@type": "Quotation",
+                        "text": "That's one small step for man, one giant leap for mankind.",
+                        "creator": { "@type": "Person", "name": "Neil Armstrong" }
+                    }
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "item": {
+                        "@type": "Quotation",
+                        "text": "The Earth is the cradle of humanity, but mankind cannot stay in the cradle forever.",
+                        "creator": { "@type": "Person", "name": "Konstantin Tsiolkovsky" }
+                    }
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "item": {
+                        "@type": "Quotation",
+                        "text": "Somewhere, something incredible is waiting to be known.",
+                        "creator": { "@type": "Person", "name": "Carl Sagan" }
+                    }
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 4,
+                    "item": {
+                        "@type": "Quotation",
+                        "text": "The universe is under no obligation to make sense to you.",
+                        "creator": { "@type": "Person", "name": "Neil deGrasse Tyson" }
+                    }
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 5,
+                    "item": {
+                        "@type": "Quotation",
+                        "text": "We are all made of star stuff.",
+                        "creator": { "@type": "Person", "name": "Carl Sagan" }
+                    }
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 6,
+                    "item": {
+                        "@type": "Quotation",
+                        "text": "Space is for everybody. It's not just for a few people in science or math, or for a select group of astronauts.",
+                        "creator": { "@type": "Person", "name": "Christa McAuliffe" }
+                    }
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 7,
+                    "item": {
+                        "@type": "Quotation",
+                        "text": "The cosmos is within us. We are made of star-stuff. We are a way for the universe to know itself.",
+                        "creator": { "@type": "Person", "name": "Carl Sagan" }
+                    }
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 8,
+                    "item": {
+                        "@type": "Quotation",
+                        "text": "I don't think the human race will survive the next thousand years, unless we spread into space.",
+                        "creator": { "@type": "Person", "name": "Stephen Hawking" }
+                    }
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 9,
+                    "item": {
+                        "@type": "Quotation",
+                        "text": "For all its material advantages, the sedentary life has left us edgy, unfulfilled. Even after 400 generations in villages and cities, we haven't forgotten. The open road still softly calls.",
+                        "creator": { "@type": "Person", "name": "Carl Sagan" }
+                    }
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 10,
+                    "item": {
+                        "@type": "Quotation",
+                        "text": "Earth is a small town with many neighborhoods in a very big universe.",
+                        "creator": { "@type": "Person", "name": "Ron Garan" }
+                    }
+                }
+            ]
+        }
+    }
+    </script>
     <style>
         * {
             margin: 0;
@@ -208,6 +338,29 @@
             color: rgba(100, 200, 255, 0.9);
         }
 
+        /* Screen reader only - visible to crawlers, hidden visually */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* SEO content: visible to crawlers, hidden from display */
+        .seo-quotes {
+            position: absolute;
+            left: -9999px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+
         .dev-credit {
             position: fixed;
             bottom: 20px;
@@ -242,29 +395,82 @@
     </style>
 </head>
 <body>
-    <div class="background" id="background"></div>
+    <div class="background" id="background" role="img" aria-label="Hubble Space Telescope imagery"></div>
     <div class="background-overlay"></div>
 
-    <div class="loading" id="loading">LOADING</div>
+    <div class="loading" id="loading" aria-live="polite">LOADING</div>
 
-    <div class="quote-container" id="quote-container" style="display: none;">
-        <p class="quote" id="quote-text"></p>
-        <p class="author" id="quote-author"></p>
-    </div>
+    <main>
+        <article class="quote-container" id="quote-container" style="display: none;">
+            <h1 class="sr-only">Space Quotes - Daily Inspiration from the Cosmos</h1>
+            <blockquote>
+                <p class="quote" id="quote-text"></p>
+                <footer>
+                    <cite class="author" id="quote-author"></cite>
+                </footer>
+            </blockquote>
+        </article>
 
-    <div class="countdown-container">
+        <!-- SEO: All quotes rendered in HTML for crawlers (hidden visually, visible to search engines) -->
+        <section class="seo-quotes" aria-label="All Space Exploration Quotes">
+            <h2>Famous Space Exploration Quotes</h2>
+            <blockquote>
+                <p>"That's one small step for man, one giant leap for mankind."</p>
+                <footer>— <cite>Neil Armstrong</cite>, Apollo 11 astronaut, first person to walk on the Moon</footer>
+            </blockquote>
+            <blockquote>
+                <p>"The Earth is the cradle of humanity, but mankind cannot stay in the cradle forever."</p>
+                <footer>— <cite>Konstantin Tsiolkovsky</cite>, founding father of astronautics and rocketry</footer>
+            </blockquote>
+            <blockquote>
+                <p>"Somewhere, something incredible is waiting to be known."</p>
+                <footer>— <cite>Carl Sagan</cite>, astronomer, cosmologist, and science communicator</footer>
+            </blockquote>
+            <blockquote>
+                <p>"The universe is under no obligation to make sense to you."</p>
+                <footer>— <cite>Neil deGrasse Tyson</cite>, astrophysicist and science communicator</footer>
+            </blockquote>
+            <blockquote>
+                <p>"We are all made of star stuff."</p>
+                <footer>— <cite>Carl Sagan</cite>, from Cosmos: A Personal Voyage</footer>
+            </blockquote>
+            <blockquote>
+                <p>"Space is for everybody. It's not just for a few people in science or math, or for a select group of astronauts."</p>
+                <footer>— <cite>Christa McAuliffe</cite>, NASA Teacher in Space Project astronaut</footer>
+            </blockquote>
+            <blockquote>
+                <p>"The cosmos is within us. We are made of star-stuff. We are a way for the universe to know itself."</p>
+                <footer>— <cite>Carl Sagan</cite>, from Cosmos: A Personal Voyage</footer>
+            </blockquote>
+            <blockquote>
+                <p>"I don't think the human race will survive the next thousand years, unless we spread into space."</p>
+                <footer>— <cite>Stephen Hawking</cite>, theoretical physicist and cosmologist</footer>
+            </blockquote>
+            <blockquote>
+                <p>"For all its material advantages, the sedentary life has left us edgy, unfulfilled. Even after 400 generations in villages and cities, we haven't forgotten. The open road still softly calls."</p>
+                <footer>— <cite>Carl Sagan</cite>, from Pale Blue Dot</footer>
+            </blockquote>
+            <blockquote>
+                <p>"Earth is a small town with many neighborhoods in a very big universe."</p>
+                <footer>— <cite>Ron Garan</cite>, NASA astronaut and author</footer>
+            </blockquote>
+            <p>Featuring daily-rotating Hubble Space Telescope imagery including the Pillars of Creation, Carina Nebula, Tarantula Nebula, Eagle Nebula, Orion Nebula, Phantom Galaxy, and Westerlund 2 star cluster. New quote displayed on every visit.</p>
+        </section>
+    </main>
+
+    <nav class="countdown-container" aria-label="Image rotation timer">
         <div class="countdown-label">Next Image In</div>
-        <div class="countdown-time" id="countdown">--:--:--</div>
-    </div>
+        <div class="countdown-time" id="countdown" aria-live="polite">--:--:--</div>
+    </nav>
 
-    <div class="image-credit" id="image-credit"></div>
+    <aside class="image-credit" id="image-credit" aria-label="Image credit"></aside>
 
-    <div class="dev-credit">
+    <footer class="dev-credit">
         Built with Claude Code
-        <a href="https://github.com/acaracappa/space-quotes" target="_blank" title="View on GitHub">
-            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub">
+        <a href="https://github.com/acaracappa/space-quotes" target="_blank" rel="noopener" title="View Space Quotes source code on GitHub">
+            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20" loading="lazy">
         </a>
-    </div>
+    </footer>
 
     <script>
         // Famous space exploration quotes
