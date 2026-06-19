@@ -1,4 +1,9 @@
 {
   "_comment": "Ledger of published tidbit slugs + the filing_id they came from. Used to dedupe so the same filing is not drafted twice. Append on publish.",
-  "published": []
+  "published": [
+    {
+      "slug": "cca-oppose-25-201",
+      "filing_id": "daa4028b-fc5a-48aa-a327-71fbe9f87731"
+    }
+  ]
 }
