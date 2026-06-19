@@ -1,0 +1,4 @@
+{
+  "_comment": "Ledger of published tidbit slugs + the filing_id they came from. Used to dedupe so the same filing is not drafted twice. Append on publish.",
+  "published": []
+}

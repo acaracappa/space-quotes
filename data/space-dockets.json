@@ -1,0 +1,11 @@
+{
+  "_comment": "Curated FCC Space Bureau dockets auto mode rotates through. These are pre-vetted as space-relevant and contested. Extend as new active proceedings appear.",
+  "dockets": [
+    { "docket": "18-313", "label": "Orbital debris mitigation rules" },
+    { "docket": "25-201", "label": "AST SpaceMobile NGSO license modification" },
+    { "docket": "25-157", "label": "Modernizing NGSO/GSO spectrum sharing" },
+    { "docket": "22-271", "label": "Supplemental coverage from space (direct-to-cell)" },
+    { "docket": "23-135", "label": "Space innovation / non-traditional missions" },
+    { "docket": "20-330", "label": "Kuiper / NGSO FSS constellation" }
+  ]
+}

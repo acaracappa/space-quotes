@@ -14,3 +14,8 @@ node_modules/
 
 # Logs
 *.log
+
+# Local secrets (Orbit Sentinel API key)
+.env
+out/
+node_modules/
