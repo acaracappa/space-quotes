@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Space Quotes — Tidbits</title>
+    <link>https://spacequotes.org/tidbits/</link>
+    <atom:link href="https://spacequotes.org/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Sourced tidbits from real FCC, ITU and FAA space filings, paired with space quotes.</description>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 19 Jun 2026 22:48:01 GMT</lastBuildDate>
+    <item>
+      <title>AST SpaceMobile just told the FCC exactly how its giant satellites will fall out of the sky</title>
+      <link>https://spacequotes.org/tidbits/ast-deorbit/</link>
+      <guid isPermaLink="true">https://spacequotes.org/tidbits/ast-deorbit/</guid>
+      <pubDate>Fri, 20 Feb 2026 09:00:00 GMT</pubDate>
+      <description>On February 20, 2026, AST &amp; Science, LLC (AST SpaceMobile) filed a supplement in FCC docket 25-201 detailing how it will dispose of its satellites at end of …</description>
+    </item>
+    <item>
+      <title>Amazon wants the FCC to rewrite satellite-spectrum rules set when Ka-band was 'in its infancy'</title>
+      <link>https://spacequotes.org/tidbits/kuiper-gso-links/</link>
+      <guid isPermaLink="true">https://spacequotes.org/tidbits/kuiper-gso-links/</guid>
+      <pubDate>Thu, 29 Jan 2026 09:00:00 GMT</pubDate>
+      <description>On January 29, 2026, Kuiper Systems LLC — the Amazon satellite venture now permanently branded Amazon Leo — filed a letter in FCC docket 25-157, the Moderniz…</description>
+    </item>
+    <item>
+      <title>Rural carriers tell the FCC: don't let satellites beam over our spectrum without permission</title>
+      <link>https://spacequotes.org/tidbits/cca-oppose-25-201/</link>
+      <guid isPermaLink="true">https://spacequotes.org/tidbits/cca-oppose-25-201/</guid>
+      <pubDate>Tue, 18 Nov 2025 09:00:00 GMT</pubDate>
+      <description>On November 18, 2025, the Competitive Carriers Association (CCA) filed an opposition in FCC docket 25-201 against the applications of AST &amp; Science, AT&amp;T, Ve…</description>
+    </item>
+  </channel>
+</rss>

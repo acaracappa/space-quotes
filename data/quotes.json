@@ -1,0 +1,12 @@
+[
+  { "id": "armstrong-small-step", "quote": "That's one small step for man, one giant leap for mankind.", "author": "Neil Armstrong" },
+  { "id": "tsiolkovsky-cradle", "quote": "The Earth is the cradle of humanity, but mankind cannot stay in the cradle forever.", "author": "Konstantin Tsiolkovsky" },
+  { "id": "sagan-incredible", "quote": "Somewhere, something incredible is waiting to be known.", "author": "Carl Sagan" },
+  { "id": "tyson-no-obligation", "quote": "The universe is under no obligation to make sense to you.", "author": "Neil deGrasse Tyson" },
+  { "id": "sagan-star-stuff", "quote": "We are all made of star stuff.", "author": "Carl Sagan" },
+  { "id": "mcauliffe-everybody", "quote": "Space is for everybody. It's not just for a few people in science or math, or for a select group of astronauts.", "author": "Christa McAuliffe" },
+  { "id": "sagan-cosmos-within", "quote": "The cosmos is within us. We are made of star-stuff. We are a way for the universe to know itself.", "author": "Carl Sagan" },
+  { "id": "hawking-survive", "quote": "I don't think the human race will survive the next thousand years, unless we spread into space.", "author": "Stephen Hawking" },
+  { "id": "sagan-open-road", "quote": "For all its material advantages, the sedentary life has left us edgy, unfulfilled. Even after 400 generations in villages and cities, we haven't forgotten. The open road still softly calls.", "author": "Carl Sagan" },
+  { "id": "garan-small-town", "quote": "Earth is a small town with many neighborhoods in a very big universe.", "author": "Ron Garan" }
+]
