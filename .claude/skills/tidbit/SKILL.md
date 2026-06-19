@@ -56,6 +56,11 @@ source_label: "<agency> · <docket> · <submission type>"
 source_url: "<source_url from factsheet>"
 quote_id: <id from data/quotes.json>
 tags: [<3-5 kebab tags>]
+faq:
+  Q: <question a reader would ask>
+  A: <answer — same grounding rules: only verified facts, no new claims>
+  Q: <2-3 Q&As total, optional but recommended>
+  A: <...>
 ---
 
 <Lede graf: what happened — grounded facts only.>

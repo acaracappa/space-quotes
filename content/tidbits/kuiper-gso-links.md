@@ -6,6 +6,13 @@ source_label: "FCC ECFS · SB Docket 25-157 · Letter"
 source_url: "https://www.fcc.gov/ecfs/document/10129908013106/1"
 quote_id: garan-small-town
 tags: [spectrum-sharing, ngso, gso, spectrum, fcc, kuiper]
+faq:
+  Q: What is Amazon Leo asking the FCC to do in docket 25-157?
+  A: To adopt a "modern, realistic set of GSO reference links" for sharing Ka-band spectrum between geostationary and non-geostationary satellite systems, arguing the existing references reflect technology from an era when use of the Ka-band was "still in its infancy."
+  Q: Is Amazon Leo the same as Project Kuiper?
+  A: Yes — Amazon Leo is the permanent brand name for Amazon's satellite broadband network, formerly known as Project Kuiper.
+  Q: Does Amazon Leo take a position on the Ku-band reference links?
+  A: No — the filing explicitly takes no position on the appropriate GSO reference links for the Ku-band.
 ---
 
 On January 29, 2026, **Kuiper Systems LLC** — the Amazon satellite venture now permanently

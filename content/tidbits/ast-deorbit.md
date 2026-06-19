@@ -6,6 +6,13 @@ source_label: "FCC ECFS · SB Docket 25-201 · Supplement"
 source_url: "https://www.fcc.gov/ecfs/document/102202160628149/1"
 quote_id: tsiolkovsky-cradle
 tags: [orbital-debris, deorbit, fcc, direct-to-cell, ast-spacemobile]
+faq:
+  Q: How will AST SpaceMobile deorbit its satellites?
+  A: After coordination discussions with NASA, AST will use thrusters to lower satellites from 680–690 km to below 530 km, then hold a high-drag, gravity-gradient–stable orientation until atmospheric reentry — a phase it expects to last 1.5 to 3.5 years.
+  Q: Why does the size of AST's satellites matter for deorbiting?
+  A: Because of the very large phased-array cross-section, the filing says modifying the drag profile gives more control over the descent than firing thrusters.
+  Q: What changed from AST's earlier deorbit plan?
+  A: Instead of relying on random tumbling as a last-resort contingency, AST will actively control each spacecraft's descent and maintain collision-avoidance through the high-drag phase until shortly before reentry.
 ---
 
 On February 20, 2026, **AST & Science, LLC** (AST SpaceMobile) filed a supplement in FCC docket

@@ -50,10 +50,19 @@ function parse(md, file) {
     else v = v.replace(/^["']|["']$/g, "");
     fm[kv[1]] = v;
   }
+  // Optional FAQ block in frontmatter: lines of "Q: ..." each followed by "A: ..." (single-line).
+  const faq = [];
+  let pendingQ = null;
+  for (const line of m[1].split("\n")) {
+    const q = line.match(/^\s*Q:\s*(.+)$/);
+    const a = line.match(/^\s*A:\s*(.+)$/);
+    if (q) pendingQ = q[1].trim();
+    else if (a && pendingQ) { faq.push({ q: pendingQ, a: a[1].trim() }); pendingQ = null; }
+  }
   const body = m[2].replace(/<!--[\s\S]*?-->/g, "").trim();
   const docket = (fm.source_label && (fm.source_label.match(/Docket\s+([0-9-]+)/) || [])[1]) || null;
   const mtime = file ? statSync(file).mtime.toISOString() : new Date().toISOString();
-  return { fm, body, docket, mtime };
+  return { fm, body, docket, mtime, faq };
 }
 
 const inline = (s) =>
@@ -162,8 +171,16 @@ const ICONS = {
 };
 
 // ---------- tidbit page ----------
-function page(fm, bodyHtml, quote, ogImage, desc, mtime, related, docket) {
+function page(fm, bodyHtml, quote, ogImage, desc, mtime, related, docket, faq = []) {
   const url = `${SITE}/tidbits/${fm.slug}/`;
+  const faqHtml = faq.length
+    ? `<section class="faq"><h2>Questions &amp; answers</h2><dl>${faq
+        .map((f) => `<dt>${esc(f.q)}</dt><dd>${inline(f.a)}</dd>`)
+        .join("")}</dl></section>`
+    : "";
+  const faqLd = faq.length
+    ? [{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }]
+    : [];
   const tags = Array.isArray(fm.tags) ? fm.tags : fm.tags ? [fm.tags] : [];
   const filedHtml =
     docket || tags.length
@@ -224,6 +241,7 @@ function page(fm, bodyHtml, quote, ogImage, desc, mtime, related, docket) {
 ${FONTS}
 ${ld(article)}
 ${ld(breadcrumb)}
+${faqLd.map(ld).join("\n")}
 <style>
 :root{color-scheme:dark;--bg:#0a0a0f;--accent:#6f9bff;--text:#eef1fa;--muted:#aebbe6;--dim:#9aa6cf}
 *{box-sizing:border-box}
@@ -247,6 +265,11 @@ h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(30px,5.2vw,44px);line-he
 .filed span{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--dim);margin-right:2px}
 .chiptag{display:inline-block;padding:5px 12px;border-radius:999px;border:1px solid rgba(120,150,255,.28);background:rgba(255,255,255,.03);color:var(--muted);font-size:13px;text-decoration:none}
 .chiptag:hover{border-color:var(--accent);color:#fff}
+.faq{margin-top:50px;padding-top:28px;border-top:1px solid #1c2138}
+.faq h2{font-family:'Fraunces',Georgia,serif;font-size:24px;font-weight:700;margin:0 0 18px;letter-spacing:-.3px}
+.faq dl{margin:0}
+.faq dt{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;font-weight:600;font-size:17px;color:#fff;margin:18px 0 6px}
+.faq dd{margin:0;color:var(--muted);font-size:17px}
 .related{margin-top:48px;padding-top:26px;border-top:1px solid #1c2138;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif}
 .related h2{font-size:13px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);margin:0 0 14px}
 .related ul{list-style:none;padding:0;margin:0}
@@ -269,8 +292,9 @@ ${bodyHtml}
 </div>
 ${filedHtml}
 </article>
+${faqHtml}
 ${relHtml}
-<footer>A <a href="/tidbits/">Space Quotes tidbit</a> — real space-regulatory filings, paired with the words that saw them coming. <a href="/">spacequotes.org</a></footer>
+<footer>A <a href="/tidbits/">Space Quotes tidbit</a> — real space-regulatory filings, paired with the words that saw them coming. <a href="/about/">How we source &amp; verify</a> · <a href="/">spacequotes.org</a></footer>
 </div>
 </body>
 </html>
@@ -511,7 +535,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(120,150,255,.1);mar
 <div class="stars"></div><div class="glow"></div>
 <header><div class="shell bar">
   <div class="brand">${ICONS.star}SPACE QUOTES</div>
-  <nav class="nav"><a href="#latest">Tidbits</a><a href="/topics/">Topics</a><a href="/tidbits/">Archive</a><a href="#about">About</a></nav>
+  <nav class="nav"><a href="#latest">Tidbits</a><a href="/topics/">Topics</a><a href="/tidbits/">Archive</a><a href="/about/">About</a></nav>
 </div></header>
 
 <main class="shell">
@@ -559,7 +583,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(120,150,255,.1);mar
 
 <footer><div class="shell foot">
   <div>✦ Space Quotes — the paperwork of leaving Earth, read between the lines.</div>
-  <div><a href="/tidbits/">Tidbits</a> · <a href="/feed.xml">RSS</a> · <a href="/sitemap.xml">Sitemap</a> · spacequotes.org</div>
+  <div><a href="/tidbits/">Tidbits</a> · <a href="/about/">About</a> · <a href="/feed.xml">RSS</a> · <a href="/sitemap.xml">Sitemap</a> · spacequotes.org</div>
 </div></footer>
 
 <script>
@@ -572,6 +596,85 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(120,150,255,.1);mar
   setInterval(show,7000);
 })();
 </script>
+</body>
+</html>
+`;
+}
+
+// ---------- about / methodology ----------
+function aboutPage() {
+  const desc = "How Space Quotes works: every tidbit is built from primary FCC, ITU and FAA filings, verified against the source record before publishing, and paired with a vetted space quote.";
+  const url = `${SITE}/about/`;
+  const aboutLd = { "@context": "https://schema.org", "@type": "AboutPage", name: "About Space Quotes", url, description: desc, isPartOf: { "@type": "WebSite", name: "Space Quotes", url: SITE }, publisher: { "@type": "Organization", name: "Space Quotes", url: SITE, logo: { "@type": "ImageObject", url: `${SITE}/assets/og/home.png`, width: 1200, height: 630 } } };
+  const breadcrumb = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Space Quotes", item: `${SITE}/` }, { "@type": "ListItem", position: 2, name: "About", item: url }] };
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About & methodology — how Space Quotes sources and verifies | Space Quotes</title>
+<meta name="description" content="${escAttr(desc)}">
+<link rel="canonical" href="${url}">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:site_name" content="Space Quotes">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${url}">
+<meta property="og:title" content="About & methodology — Space Quotes">
+<meta property="og:description" content="${escAttr(desc)}">
+<meta property="og:image" content="${SITE}/assets/og/home.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${SITE}/assets/og/home.png">
+<meta name="theme-color" content="#0a0a0f">
+${FONTS}
+${ld(aboutLd)}
+${ld(breadcrumb)}
+<style>
+:root{color-scheme:dark;--bg:#0a0a0f;--accent:#6f9bff;--text:#eef1fa;--muted:#aebbe6;--dim:#9aa6cf}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Newsreader',Georgia,serif;font-size:19px;line-height:1.75;overflow-x:hidden}
+${STARFIELD}
+.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:40px 22px 90px}
+a{color:#9fbcff}
+nav{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;font-size:14px;color:var(--dim);margin-bottom:34px}
+nav a{color:var(--muted);text-decoration:none}
+h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(32px,5.4vw,46px);line-height:1.12;margin:0 0 14px;font-weight:800;letter-spacing:-.5px;padding-bottom:.06em}
+.lede{color:var(--muted);font-size:21px;margin:0 0 36px}
+h2{font-family:'Fraunces',Georgia,serif;font-size:25px;font-weight:700;margin:40px 0 12px;letter-spacing:-.3px}
+p{margin:0 0 20px}
+ul{padding-left:22px;margin:0 0 20px}
+li{margin:0 0 12px}
+strong{color:#fff}
+.principle{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif}
+footer{margin-top:50px;padding-top:24px;border-top:1px solid #1c2138;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;font-size:14px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="stars"></div><div class="glow"></div>
+<div class="wrap">
+<nav><a href="/">Space Quotes</a> &nbsp;/&nbsp; About</nav>
+<h1>About &amp; methodology</h1>
+<p class="lede">Space Quotes turns the dense public record of space regulation into short, sourced, shareable dispatches — and pairs each one with the words that saw it coming.</p>
+
+<h2>Where the facts come from</h2>
+<p>Every tidbit is built from <strong>primary filings in the public regulatory record</strong> — the FCC (ECFS and IBFS), the ITU, the FAA and the dockets where the future of orbit is actually argued. We surface them through a space-regulatory dataset that crawls and links these sources, and every tidbit links back to the original document so you can read it yourself.</p>
+
+<h2>How we keep it accurate</h2>
+<p>Accuracy isn't a nice-to-have here — it's the entire value of the site. So the process is built to make a wrong claim hard to publish:</p>
+<ul class="principle">
+<li><strong>We separate facts from framing.</strong> Every factual claim is drawn only from structured fields in the official record or text quoted directly from the primary document.</li>
+<li><strong>We treat machine summaries as untrusted.</strong> Automated summaries can be wrong, so any specific claim — an altitude, a frequency, a count — is confirmed against the primary document or dropped.</li>
+<li><strong>We verify before we publish.</strong> An independent check reviews every draft against its sources and rejects anything that isn't supported. A tidbit that doesn't pass doesn't go up.</li>
+<li><strong>We never invent quotes.</strong> Quotes come from a fixed, vetted list and are never altered or reattributed.</li>
+</ul>
+
+<h2>Why pair filings with quotes</h2>
+<p>A docket number is easy to ignore. The reason any of this matters — that we are slowly, bureaucratically deciding how humanity lives in space — is not. Pairing a real filing with a line from the people who dreamed about leaving Earth is how we make the paperwork mean something, and worth sharing.</p>
+
+<h2>Corrections</h2>
+<p>Found an error? It matters to us — accuracy is the whole point of this site, and we'll correct or remove anything that turns out to be wrong.</p>
+
+<footer><a href="/tidbits/">Browse the tidbits →</a> · spacequotes.org</footer>
+</div>
 </body>
 </html>
 `;
@@ -644,7 +747,7 @@ for (const it of items) {
   if (!quote) throw new Error(`unknown quote_id ${it.fm.quote_id} in ${it.fm.slug}`);
   const ogImage = ogCard(it.fm.slug, it.fm, quote);
   const desc = metaDescription(it.body);
-  const html = page(it.fm, bodyToHtml(it.body), quote, ogImage, desc, it.mtime, relatedFor(it), it.docket);
+  const html = page(it.fm, bodyToHtml(it.body), quote, ogImage, desc, it.mtime, relatedFor(it), it.docket, it.faq);
   const dir = join(ROOT, "tidbits", it.fm.slug);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "index.html"), html);
@@ -677,8 +780,10 @@ writeFileSync(join(ROOT, "dockets", "index.html"), hubIndex("dockets", docketEnt
 const hubIndexUrls = ["/topics/", "/dockets/"];
 
 mkdirSync(join(ROOT, "tidbits"), { recursive: true });
+mkdirSync(join(ROOT, "about"), { recursive: true });
 writeFileSync(join(ROOT, "tidbits", "index.html"), feedPage(items));
+writeFileSync(join(ROOT, "about", "index.html"), aboutPage());
 writeFileSync(join(ROOT, "index.html"), homePage(items, topicEntries));
 writeFileSync(join(ROOT, "feed.xml"), feedXml(items));
-writeFileSync(join(ROOT, "sitemap.xml"), sitemap(items, [...hubIndexUrls, ...hubUrls]));
+writeFileSync(join(ROOT, "sitemap.xml"), sitemap(items, ["/about/", ...hubIndexUrls, ...hubUrls]));
 console.log(`built homepage + ${items.length} tidbit(s) + ${Object.keys(byTag).length} topic + ${Object.keys(byDocket).length} docket hubs + feed + RSS + sitemap`);

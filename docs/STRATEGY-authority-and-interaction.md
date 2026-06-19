@@ -48,13 +48,14 @@ on every tidbit (→ hubs), a "Browse by topic" section on the homepage, and all
 sitemap. This is the cluster backbone that lets long-tail tidbits and head-term hubs reinforce
 each other.
 
+Also shipped: **About / methodology page** (`/about/`, AboutPage + Organization schema) and
+**FAQPage schema** on tidbits (verified Q&As, visible + structured).
+
 **Backlog (prioritized):**
-1. **FAQPage schema** on tidbits (2–3 Q&As mirroring headings) → CTR + featured snippets.
-3. **Named author / editorial entity** + `sameAs` social profiles on Organization → entity
+1. **Named author / editorial entity** + `sameAs` social profiles on Organization → entity
    authority + knowledge panel eligibility.
-4. **Self-host fonts** (drop the Google Fonts request) for privacy + LCP.
-5. **Deeper bodies** (§2) and an **About / methodology** page (explains sourcing + verification
-   — a direct E-E-A-T asset and a link target).
+2. **Self-host fonts** (drop the Google Fonts request) for privacy + LCP.
+3. **Deeper bodies** (§2) — push tidbits toward 350–500 words without unverified claims.
 6. Submit sitemap to Search Console + Bing Webmaster; monitor coverage.
 
 ## 4. Distribution & interaction
@@ -89,8 +90,8 @@ The accelerant is **trust**: the more reliably accurate we are, the more freely 
 
 ## 7. Next builds (recommended order)
 1. ~~Topic/docket hub pages (cluster architecture)~~ — **shipped.**
-2. **About/methodology page** + named editorial entity + `sameAs` — E-E-A-T + link target.
-3. **FAQ schema + deeper bodies** — rich results + long-tail depth.
+2. ~~About/methodology page~~ — **shipped.** (Named editorial entity + `sameAs` still open.)
+3. ~~FAQ schema~~ — **shipped.** Deeper 350–500-word bodies still open.
 4. **Email digest + social automation** off the existing share cards — distribution.
 5. **Go live** (merge → push) and submit the sitemap to Search Console.
 6. Keep the content engine running: a few verified tidbits per week, no exceptions to the gate.

@@ -6,6 +6,13 @@ source_label: "FCC ECFS · SB Docket 25-201 · Opposition"
 source_url: "https://www.fcc.gov/ecfs/document/1118442713143/1"
 quote_id: mcauliffe-everybody
 tags: [supplemental-coverage-from-space, direct-to-cell, spectrum, competition, fcc]
+faq:
+  Q: Why did the Competitive Carriers Association oppose docket 25-201?
+  A: CCA argued the applications would authorize secondary satellite operations over licensed spectrum without the consent of the primary licensees, and that its rural-carrier members could face device-to-device, co-channel and adjacent-channel interference.
+  Q: What does CCA want the FCC to do?
+  A: It asks the Commission to require a complete CONUS GIA to protect licensed operations — or to deny the application.
+  Q: Who filed for the Supplemental Coverage from Space authorization?
+  A: The applications were filed by AST & Science, LLC together with AT&T, Verizon and FirstNet.
 ---
 
 On November 18, 2025, the **Competitive Carriers Association** (CCA) filed an opposition in FCC
