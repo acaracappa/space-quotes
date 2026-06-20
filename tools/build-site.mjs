@@ -322,7 +322,7 @@ ${filedHtml}
 </article>
 ${faqHtml}
 ${relHtml}
-<footer>Written by <a rel="author" href="${AUTHOR.url}">${esc(AUTHOR_NAME)}</a> · a <a href="/tidbits/">Space Quotes tidbit</a>, the quotable lines from real space-regulatory filings. <a href="/about/">How we source &amp; verify</a> · <a rel="me" href="https://www.linkedin.com/in/acaracappa/">LinkedIn</a> · <a rel="me" href="https://github.com/acaracappa">GitHub</a></footer>
+<footer>Written by <a rel="author" href="${AUTHOR.url}">${esc(AUTHOR_NAME)}</a> · a <a href="/tidbits/">Space Quotes tidbit</a>, the quotable lines from real space-regulatory filings. <a href="/about/">How we source &amp; verify</a></footer>
 </div>
 </body>
 </html>
@@ -613,7 +613,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(120,150,255,.1);mar
 
 <footer><div class="shell foot">
   <div>✦ Space Quotes — the paperwork of leaving Earth, read between the lines.</div>
-  <div><a href="/tidbits/">Tidbits</a> · <a href="/about/">About</a> · <a href="/feed.xml">RSS</a> · <a rel="me" href="https://www.linkedin.com/in/acaracappa/">LinkedIn</a> · <a rel="me" href="https://github.com/acaracappa">GitHub</a></div>
+  <div><a href="/tidbits/">Tidbits</a> · <a href="/about/">About</a> · <a href="/feed.xml">RSS</a> · <a href="/sitemap.xml">Sitemap</a> · spacequotes.org</div>
 </div></footer>
 
 <script>
