@@ -171,7 +171,14 @@ const STARFIELD = `
 @keyframes drift{to{background-position:340px 340px}}
 @media (prefers-reduced-motion:reduce){.stars,.stars::before{animation:none}*{scroll-behavior:auto!important}}`;
 
-const FONTS = `<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,800;1,9..144,500&family=Newsreader:ital@0;1&display=swap" rel="stylesheet">`;
+// Self-hosted fonts (no external Google request — better LCP + privacy). Latin-subset woff2.
+const FONTS = `<link rel="preload" href="/assets/fonts/fraunces-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:600 800;font-display:swap;src:url(/assets/fonts/fraunces-normal.woff2) format('woff2')}
+@font-face{font-family:'Fraunces';font-style:italic;font-weight:500;font-display:swap;src:url(/assets/fonts/fraunces-italic.woff2) format('woff2')}
+@font-face{font-family:'Newsreader';font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/newsreader-normal.woff2) format('woff2')}
+@font-face{font-family:'Newsreader';font-style:italic;font-weight:400;font-display:swap;src:url(/assets/fonts/newsreader-italic.woff2) format('woff2')}
+</style>`;
 
 const ICONS = {
   source: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9-9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5"/></svg>',
