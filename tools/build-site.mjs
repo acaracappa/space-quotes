@@ -19,8 +19,8 @@ const SITE = "https://spacequotes.org";
 const CONTENT = join(ROOT, "content", "tidbits");
 const SAME_AS = []; // add social profile URLs here when they exist (X, LinkedIn, GitHub)
 
-const quotes = JSON.parse(readFileSync(join(ROOT, "data", "quotes.json"), "utf8"));
-const quoteById = Object.fromEntries(quotes.map((q) => [q.id, q]));
+// Tidbits now use verbatim quotes pulled from the filings themselves (see memory:
+// content-direction-v2). The famous-quote library is retired from tidbits.
 
 const DOCKET_LABELS = Object.fromEntries(
   (JSON.parse(readFileSync(join(ROOT, "data", "space-dockets.json"), "utf8")).dockets || []).map((d) => [d.docket, d.label])
@@ -62,7 +62,16 @@ function parse(md, file) {
   const body = m[2].replace(/<!--[\s\S]*?-->/g, "").trim();
   const docket = (fm.source_label && (fm.source_label.match(/Docket\s+([0-9-]+)/) || [])[1]) || null;
   const mtime = file ? statSync(file).mtime.toISOString() : new Date().toISOString();
-  return { fm, body, docket, mtime, faq };
+  // The pull-quote: the first blockquote in the body (verbatim line from the filing + attribution).
+  let pull = null;
+  const bq = body.split(/\n\s*\n/).find((b) => b.trim().startsWith(">"));
+  if (bq) {
+    const inner = bq.split("\n").map((l) => l.replace(/^>\s?/, "")).filter(Boolean);
+    const text = (inner[0] || "").replace(/^[“"']|[”"']$/g, "").trim();
+    const by = (inner[1] || "").replace(/^—\s*/, "").trim();
+    if (text) pull = { text, by };
+  }
+  return { fm, body, docket, mtime, faq, pull };
 }
 
 const inline = (s) =>
@@ -118,12 +127,12 @@ function wrap(text, max) {
 function magick(args, label) {
   try { execFileSync("magick", args); return true; } catch (e) { console.warn(`  OG card failed for ${label}: ${e.message}`); return false; }
 }
-function ogCard(slug, fm, quote) {
+function ogCard(slug, fm, pull) {
   const ogDir = join(ROOT, "assets", "og");
   mkdirSync(ogDir, { recursive: true });
   const pngPath = join(ogDir, `${slug}.png`);
   const titleLines = wrap(fm.title, 38).slice(0, 4);
-  const qLines = wrap(`“${quote.quote}”`, 58).slice(0, 3);
+  const qLines = wrap(`“${(pull && pull.text) || fm.title}”`, 58).slice(0, 3);
   const args = ["-size", "1200x630", "gradient:#0a0a2a-#0a0a0f",
     "-fill", "#5b8cff", "-draw", "rectangle 0,0 1200,6",
     "-font", FONT_BOLD, "-fill", "#8aa0d8", "-pointsize", "26", "-annotate", "+80+92", "SPACEQUOTES.ORG",
@@ -131,7 +140,7 @@ function ogCard(slug, fm, quote) {
   titleLines.forEach((l, i) => args.push("-annotate", `+80+${195 + i * 62}`, l));
   args.push("-font", FONT_ITALIC, "-fill", "#aebbe6", "-pointsize", "30");
   qLines.forEach((l, i) => args.push("-annotate", `+80+${452 + i * 40}`, l));
-  args.push("-font", FONT_REG, "-fill", "#6f7fb0", "-pointsize", "22", "-annotate", "+80+590", `— ${quote.author}   ·   ${fm.source_label || ""}`, pngPath);
+  args.push("-font", FONT_REG, "-fill", "#6f7fb0", "-pointsize", "22", "-annotate", "+80+590", `— ${(pull && pull.by) || fm.source_label || ""}`, pngPath);
   magick(args, slug);
   return `/assets/og/${slug}.png`;
 }
@@ -171,7 +180,7 @@ const ICONS = {
 };
 
 // ---------- tidbit page ----------
-function page(fm, bodyHtml, quote, ogImage, desc, mtime, related, docket, faq = []) {
+function page(fm, bodyHtml, pull, ogImage, desc, mtime, related, docket, faq = []) {
   const url = `${SITE}/tidbits/${fm.slug}/`;
   const faqHtml = faq.length
     ? `<section class="faq"><h2>Questions &amp; answers</h2><dl>${faq
@@ -294,7 +303,7 @@ ${filedHtml}
 </article>
 ${faqHtml}
 ${relHtml}
-<footer>A <a href="/tidbits/">Space Quotes tidbit</a> — real space-regulatory filings, paired with the words that saw them coming. <a href="/about/">How we source &amp; verify</a> · <a href="/">spacequotes.org</a></footer>
+<footer>A <a href="/tidbits/">Space Quotes tidbit</a> — the quotable lines from real space-regulatory filings, with a link to the source. <a href="/about/">How we source &amp; verify</a> · <a href="/">spacequotes.org</a></footer>
 </div>
 </body>
 </html>
@@ -367,7 +376,7 @@ const tidbitRow = (it) =>
 const itemListLd = (its) => ({ "@context": "https://schema.org", "@type": "ItemList", itemListElement: its.map((it, i) => ({ "@type": "ListItem", position: i + 1, url: `${SITE}/tidbits/${it.fm.slug}/`, name: it.fm.title })) });
 
 function feedPage(items) {
-  const desc = "Crafty, sourced tidbits from real FCC, ITU and FAA space filings, each paired with a space quote. From spacequotes.org.";
+  const desc = "Sourced tidbits from real FCC, ITU and FAA space filings, each built around a quotable line from the filing itself. From spacequotes.org.";
   return listingPage({
     titleTag: "Tidbits — sourced space-filing dispatches | Space Quotes",
     desc, canonical: `${SITE}/tidbits/`, h1: "Tidbits", lede: desc,
@@ -378,7 +387,7 @@ function feedPage(items) {
 }
 
 function topicHub(slug, label, its) {
-  const desc = `Space Quotes tidbits on ${label} — sourced from real FCC, ITU and FAA filings, each paired with a space quote.`;
+  const desc = `Space Quotes tidbits on ${label}, sourced from real FCC, ITU and FAA filings, each built around a real line from the filing.`;
   return listingPage({
     titleTag: `${label} — space-policy tidbits | Space Quotes`,
     desc, canonical: `${SITE}/topics/${slug}/`, h1: label,
@@ -421,7 +430,7 @@ function hubIndex(kind, entries) {
 
 // ---------- homepage ----------
 function homePage(items, topicEntries = []) {
-  const desc = "Space Quotes surfaces real, sourced tidbits from the FCC, ITU and FAA filings shaping life in orbit — each paired with a timeless space quote. Verified against primary documents, built to share.";
+  const desc = "Space Quotes surfaces real, sourced tidbits from the FCC, ITU and FAA filings shaping life in orbit, each built around a verbatim line from the filing itself. Verified against primary documents, built to share.";
   const featured = items[0];
   const rest = items.slice(1, 7);
   const homeImg = "/assets/og/home.png";
@@ -434,8 +443,10 @@ function homePage(items, topicEntries = []) {
       </a>`;
   const itemList = { "@context": "https://schema.org", "@type": "ItemList", itemListElement: items.map((it, i) => ({ "@type": "ListItem", position: i + 1, url: `${SITE}/tidbits/${it.fm.slug}/`, name: it.fm.title })) };
   const website = { "@context": "https://schema.org", "@type": "WebSite", name: "Space Quotes", url: SITE, description: desc };
-  const org = { "@context": "https://schema.org", "@type": "Organization", name: "Space Quotes", url: SITE, description: "Sourced, verified tidbits from space-regulatory filings, paired with space quotes.", logo: { "@type": "ImageObject", url: `${SITE}/assets/og/home.png`, width: 1200, height: 630 }, ...(SAME_AS.length ? { sameAs: SAME_AS } : {}) };
-  const Q = JSON.stringify(quotes.map((q) => ({ q: q.quote, a: q.author })));
+  const org = { "@context": "https://schema.org", "@type": "Organization", name: "Space Quotes", url: SITE, description: "Sourced, verified tidbits from space-regulatory filings, built around the quotable lines operators and regulators actually file.", logo: { "@type": "ImageObject", url: `${SITE}/assets/og/home.png`, width: 1200, height: 630 }, ...(SAME_AS.length ? { sameAs: SAME_AS } : {}) };
+  const pulls = items.map((it) => it.pull).filter((p) => p && p.text);
+  const Q = JSON.stringify(pulls.map((p) => ({ q: p.text, a: p.by })));
+  const firstPull = pulls[0] || { text: "The future of space is written in the fine print.", by: "Space Quotes" };
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -448,7 +459,7 @@ function homePage(items, topicEntries = []) {
 <meta property="og:site_name" content="Space Quotes">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${SITE}/">
-<meta property="og:title" content="Space Quotes — Real space filings, paired with the words that saw them coming">
+<meta property="og:title" content="Space Quotes — the real words shaping space, pulled from the filings">
 <meta property="og:description" content="${escAttr(desc)}">
 <meta property="og:image" content="${SITE}${homeImg}">
 <meta property="og:image:width" content="1200">
@@ -540,10 +551,10 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(120,150,255,.1);mar
 
 <main class="shell">
   <section class="hero">
-    <div class="eyebrow">Real space filings · Timeless words</div>
+    <div class="eyebrow">Real filings · Real quotes</div>
     <h1>The future of space is written in the fine print.</h1>
-    <p class="sub">We read the filings, comments and rulings shaping life in orbit — then pair each finding with the words that saw it coming. Sourced from primary documents, verified before it's published.</p>
-    <blockquote class="rotq" id="rotq"><span>“${esc(quotes[0].quote)}”</span><cite>— ${esc(quotes[0].author)}</cite></blockquote>
+    <p class="sub">We read the filings, comments and rulings shaping life in orbit, then pull the line that actually matters. Sourced from primary documents, verified before it's published.</p>
+    <blockquote class="rotq" id="rotq"><span>“${esc(firstPull.text)}”</span><cite>— ${esc(firstPull.by)}</cite></blockquote>
     <div class="cta">
       <a class="btn btn-p" href="#latest">Read the latest</a>
       <a class="btn btn-s" href="/tidbits/">Browse all tidbits</a>
@@ -576,7 +587,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(120,150,255,.1);mar
     <div class="trust">
       <div><div class="chip">${ICONS.source}</div><h3>Straight from the source</h3><p>Every tidbit is drawn from primary FCC, ITU and FAA filings — with a link back to the original document.</p></div>
       <div><div class="chip">${ICONS.verify}</div><h3>Verified, not generated</h3><p>Each factual claim is checked against the source record by an independent pass before it's published.</p></div>
-      <div><div class="chip">${ICONS.star}</div><h3>Made to mean something</h3><p>We pair regulatory reality with the quotes that frame why leaving Earth still matters.</p></div>
+      <div><div class="chip">${ICONS.star}</div><h3>The actual words</h3><p>Every tidbit is built around a real line from the filing, quoted verbatim and attributed, never our paraphrase.</p></div>
     </div>
   </section>
 </main>
@@ -603,7 +614,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(120,150,255,.1);mar
 
 // ---------- about / methodology ----------
 function aboutPage() {
-  const desc = "How Space Quotes works: every tidbit is built from primary FCC, ITU and FAA filings, verified against the source record before publishing, and paired with a vetted space quote.";
+  const desc = "How Space Quotes works: every tidbit is built from primary FCC, ITU and FAA filings, verified against the source record before publishing, and built around a verbatim line from the filing.";
   const url = `${SITE}/about/`;
   const aboutLd = { "@context": "https://schema.org", "@type": "AboutPage", name: "About Space Quotes", url, description: desc, isPartOf: { "@type": "WebSite", name: "Space Quotes", url: SITE }, publisher: { "@type": "Organization", name: "Space Quotes", url: SITE, logo: { "@type": "ImageObject", url: `${SITE}/assets/og/home.png`, width: 1200, height: 630 } } };
   const breadcrumb = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Space Quotes", item: `${SITE}/` }, { "@type": "ListItem", position: 2, name: "About", item: url }] };
@@ -653,25 +664,25 @@ footer{margin-top:50px;padding-top:24px;border-top:1px solid #1c2138;font-family
 <div class="wrap">
 <nav><a href="/">Space Quotes</a> &nbsp;/&nbsp; About</nav>
 <h1>About &amp; methodology</h1>
-<p class="lede">Space Quotes turns the dense public record of space regulation into short, sourced, shareable dispatches — and pairs each one with the words that saw it coming.</p>
+<p class="lede">Space Quotes turns the dense public record of space regulation into short, sourced, shareable dispatches, each built around a real line pulled from the filing itself.</p>
 
 <h2>Where the facts come from</h2>
-<p>Every tidbit is built from <strong>primary filings in the public regulatory record</strong> — the FCC (ECFS and IBFS), the ITU, the FAA and the dockets where the future of orbit is actually argued. We surface them through a space-regulatory dataset that crawls and links these sources, and every tidbit links back to the original document so you can read it yourself.</p>
+<p>Every tidbit is built from <strong>primary filings in the public regulatory record</strong>: the FCC (ECFS and IBFS), the ITU, the FAA, and the dockets where the future of orbit is actually argued. We surface them through a space-regulatory dataset that crawls and links these sources, and every tidbit links back to the original document so you can read it yourself.</p>
 
 <h2>How we keep it accurate</h2>
-<p>Accuracy isn't a nice-to-have here — it's the entire value of the site. So the process is built to make a wrong claim hard to publish:</p>
+<p>Accuracy is the entire value of the site, so the process is built to make a wrong claim hard to publish:</p>
 <ul class="principle">
 <li><strong>We separate facts from framing.</strong> Every factual claim is drawn only from structured fields in the official record or text quoted directly from the primary document.</li>
-<li><strong>We treat machine summaries as untrusted.</strong> Automated summaries can be wrong, so any specific claim — an altitude, a frequency, a count — is confirmed against the primary document or dropped.</li>
+<li><strong>We treat machine summaries as untrusted.</strong> Automated summaries can be wrong, so any specific claim (an altitude, a frequency, a count) is confirmed against the primary document or dropped.</li>
 <li><strong>We verify before we publish.</strong> An independent check reviews every draft against its sources and rejects anything that isn't supported. A tidbit that doesn't pass doesn't go up.</li>
-<li><strong>We never invent quotes.</strong> Quotes come from a fixed, vetted list and are never altered or reattributed.</li>
+<li><strong>Every quote is verbatim.</strong> The line at the heart of each tidbit is pulled straight from the filing, quoted exactly and attributed to whoever wrote it. We never paraphrase it or make it up.</li>
 </ul>
 
-<h2>Why pair filings with quotes</h2>
-<p>A docket number is easy to ignore. The reason any of this matters — that we are slowly, bureaucratically deciding how humanity lives in space — is not. Pairing a real filing with a line from the people who dreamed about leaving Earth is how we make the paperwork mean something, and worth sharing.</p>
+<h2>Why the quotes come from the filings</h2>
+<p>A docket number is easy to ignore. The actual sentence a company, a lawyer, or a rural carrier wrote into the record is not. Pulling the real line out of the paperwork is how we make a filing readable, and worth sharing, without putting words in anyone's mouth.</p>
 
 <h2>Corrections</h2>
-<p>Found an error? It matters to us — accuracy is the whole point of this site, and we'll correct or remove anything that turns out to be wrong.</p>
+<p>Found an error? Accuracy is the whole point of this site, and we'll correct or remove anything that turns out to be wrong.</p>
 
 <footer><a href="/tidbits/">Browse the tidbits →</a> · spacequotes.org</footer>
 </div>
@@ -702,7 +713,7 @@ function feedXml(items) {
     <title>Space Quotes — Tidbits</title>
     <link>${SITE}/tidbits/</link>
     <atom:link href="${SITE}/feed.xml" rel="self" type="application/rss+xml"/>
-    <description>Sourced tidbits from real FCC, ITU and FAA space filings, paired with space quotes.</description>
+    <description>Sourced tidbits from real FCC, ITU and FAA space filings, each built around a quotable line from the filing.</description>
     <language>en-us</language>
     <lastBuildDate>${now}</lastBuildDate>
 ${entries}
@@ -743,11 +754,9 @@ const relatedFor = (it) => {
 
 ogHome();
 for (const it of items) {
-  const quote = quoteById[it.fm.quote_id];
-  if (!quote) throw new Error(`unknown quote_id ${it.fm.quote_id} in ${it.fm.slug}`);
-  const ogImage = ogCard(it.fm.slug, it.fm, quote);
+  const ogImage = ogCard(it.fm.slug, it.fm, it.pull);
   const desc = metaDescription(it.body);
-  const html = page(it.fm, bodyToHtml(it.body), quote, ogImage, desc, it.mtime, relatedFor(it), it.docket, it.faq);
+  const html = page(it.fm, bodyToHtml(it.body), it.pull, ogImage, desc, it.mtime, relatedFor(it), it.docket, it.faq);
   const dir = join(ROOT, "tidbits", it.fm.slug);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "index.html"), html);
