@@ -27,6 +27,10 @@ const AUTHOR = {
 };
 const AUTHOR_NAME = "Anthony Caracappa";
 
+// Subtle, self-contained "what this runs on" note. Tells the story and gives readers a path
+// to explore or try the free beta, without a banner or hard sell.
+const BUILT_ON = `<aside style="max-width:680px;margin:46px auto 0;padding:16px 20px;border:1px solid rgba(120,150,255,.18);border-radius:14px;background:rgba(91,140,255,.05);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.65;color:#9fb0e0">Space Quotes is built on <a href="https://viventine.com" style="color:#9fbcff;text-decoration:none">Orbit Sentinel</a>, a space-regulatory data platform that tracks filings across the FCC, ITU, FAA and more. <a href="https://viventine.com" style="color:#9fbcff;text-decoration:none">Explore the data</a>, or <a href="https://console.viventine.com" style="color:#9fbcff;text-decoration:none">try the free beta</a>.</aside>`;
+
 // Tidbits now use verbatim quotes pulled from the filings themselves (see memory:
 // content-direction-v2). The famous-quote library is retired from tidbits.
 
@@ -322,6 +326,7 @@ ${filedHtml}
 </article>
 ${faqHtml}
 ${relHtml}
+${BUILT_ON}
 <footer>Written by <a rel="author" href="${AUTHOR.url}">${esc(AUTHOR_NAME)}</a> · a <a href="/tidbits/">Space Quotes tidbit</a>, the quotable lines from real space-regulatory filings. <a href="/about/">How we source &amp; verify</a></footer>
 </div>
 </body>
@@ -384,6 +389,7 @@ li a:hover .t{color:var(--accent)}
 <ul>
 ${rowsHtml}
 </ul>
+${BUILT_ON}
 </div>
 </body>
 </html>
@@ -604,16 +610,18 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(120,150,255,.1);mar
   <section id="about">
     <div class="sec-h"><h2>Sourced, verified, built to share</h2></div>
     <div class="trust">
-      <div><div class="chip">${ICONS.source}</div><h3>Straight from the source</h3><p>Every tidbit is drawn from primary FCC, ITU and FAA filings — with a link back to the original document.</p></div>
+      <div><div class="chip">${ICONS.source}</div><h3>Straight from the source</h3><p>Every tidbit is drawn from primary FCC, ITU and FAA filings, with a link back to the original document.</p></div>
       <div><div class="chip">${ICONS.verify}</div><h3>Verified, not generated</h3><p>Each factual claim is checked against the source record by an independent pass before it's published.</p></div>
       <div><div class="chip">${ICONS.star}</div><h3>The actual words</h3><p>Every tidbit is built around a real line from the filing, quoted verbatim and attributed, never our paraphrase.</p></div>
     </div>
   </section>
+
+  ${BUILT_ON}
 </main>
 
 <footer><div class="shell foot">
   <div>✦ Space Quotes — the paperwork of leaving Earth, read between the lines.</div>
-  <div><a href="/tidbits/">Tidbits</a> · <a href="/about/">About</a> · <a href="/feed.xml">RSS</a> · <a href="/sitemap.xml">Sitemap</a> · spacequotes.org</div>
+  <div><a href="/tidbits/">Tidbits</a> · <a href="/about/">About</a> · <a href="/terms/">Terms</a> · <a href="/feed.xml">RSS</a> · <a href="/sitemap.xml">Sitemap</a> · spacequotes.org</div>
 </div></footer>
 
 <script>
@@ -686,7 +694,7 @@ footer{margin-top:50px;padding-top:24px;border-top:1px solid #1c2138;font-family
 <p class="lede">Space Quotes turns the dense public record of space regulation into short, sourced, shareable dispatches, each built around a real line pulled from the filing itself.</p>
 
 <h2>Where the facts come from</h2>
-<p>Every tidbit is built from <strong>primary filings in the public regulatory record</strong>: the FCC (ECFS and IBFS), the ITU, the FAA, and the dockets where the future of orbit is actually argued. We surface them through a space-regulatory dataset that crawls and links these sources, and every tidbit links back to the original document so you can read it yourself.</p>
+<p>Every tidbit is built from <strong>primary filings in the public regulatory record</strong>: the FCC (ECFS and IBFS), the ITU, the FAA, and the dockets where the future of orbit is actually argued. We surface them through <a href="https://viventine.com">Orbit Sentinel</a>, our space-regulatory data platform, which crawls and links these sources, and every tidbit links back to the original document so you can read it yourself. Orbit Sentinel is live and free during beta: you can <a href="https://viventine.com">explore the data</a> or <a href="https://console.viventine.com">try it yourself</a>.</p>
 
 <h2>How we keep it accurate</h2>
 <p>Accuracy is the entire value of the site, so the process is built to make a wrong claim hard to publish:</p>
@@ -705,6 +713,83 @@ footer{margin-top:50px;padding-top:24px;border-top:1px solid #1c2138;font-family
 
 <h2>Corrections</h2>
 <p>Found an error? Accuracy is the whole point of this site, and we'll correct or remove anything that turns out to be wrong.</p>
+
+<footer><a href="/tidbits/">Browse the tidbits →</a> · spacequotes.org</footer>
+</div>
+</body>
+</html>
+`;
+}
+
+// ---------- terms / disclaimer ----------
+function termsPage() {
+  const desc = "Terms and disclaimer for Space Quotes: the site and its content are provided as is, for informational purposes only, with no warranties and no liability.";
+  const url = `${SITE}/terms/`;
+  const breadcrumb = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Space Quotes", item: `${SITE}/` }, { "@type": "ListItem", position: 2, name: "Terms", item: url }] };
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms & disclaimer | Space Quotes</title>
+<meta name="description" content="${escAttr(desc)}">
+<link rel="canonical" href="${url}">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:site_name" content="Space Quotes">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${url}">
+<meta property="og:title" content="Terms & disclaimer — Space Quotes">
+<meta property="og:description" content="${escAttr(desc)}">
+<meta property="og:image" content="${SITE}/assets/og/home.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${SITE}/assets/og/home.png">
+<meta name="theme-color" content="#0a0a0f">
+${FONTS}
+${ld(breadcrumb)}
+<style>
+:root{color-scheme:dark;--bg:#0a0a0f;--accent:#6f9bff;--text:#eef1fa;--muted:#aebbe6;--dim:#9aa6cf}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Newsreader',Georgia,serif;font-size:19px;line-height:1.75;overflow-x:hidden}
+${STARFIELD}
+.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:40px 22px 90px}
+a{color:#9fbcff}
+nav{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;font-size:14px;color:var(--dim);margin-bottom:34px}
+nav a{color:var(--muted);text-decoration:none}
+h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(32px,5.4vw,46px);line-height:1.12;margin:0 0 14px;font-weight:800;letter-spacing:-.5px;padding-bottom:.06em}
+.lede{color:var(--muted);font-size:21px;margin:0 0 36px}
+h2{font-family:'Fraunces',Georgia,serif;font-size:25px;font-weight:700;margin:40px 0 12px;letter-spacing:-.3px}
+p{margin:0 0 20px}
+ul{padding-left:22px;margin:0 0 20px}
+li{margin:0 0 12px}
+strong{color:#fff}
+.principle{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif}
+footer{margin-top:50px;padding-top:24px;border-top:1px solid #1c2138;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;font-size:14px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="stars"></div><div class="glow"></div>
+<div class="wrap">
+<nav><a href="/">Space Quotes</a> &nbsp;/&nbsp; Terms</nav>
+<h1>Terms &amp; disclaimer</h1>
+<p class="lede">Space Quotes is a personal project. Read it for what it is: a quick, sourced look at the public record of space regulation, not advice you should act on.</p>
+
+<h2>Provided as is</h2>
+<p>This site is provided <strong>"as is" and "as available," with no warranties of any kind</strong>, express or implied, including any warranty of accuracy, completeness, fitness for a particular purpose, or uninterrupted availability.</p>
+
+<h2>Informational use only</h2>
+<p>The space facts, quotes and regulatory tidbits here are for <strong>informational and educational purposes only</strong>. They may contain errors, omissions or things that are out of date, and they must not be relied upon for legal, business, compliance, investment or any other decision. Always verify against the primary source before you act on anything you read here.</p>
+
+<h2>No liability</h2>
+<p>To the maximum extent permitted by law, the operator of this site is <strong>not liable for any damages</strong> of any kind arising from your use of the site or your reliance on its content.</p>
+
+<h2>Quotes and attribution</h2>
+<p>Quotes are pulled from primary filings and attributed to their authors. They are believed accurate but are <strong>provided without guarantee</strong>; where a line matters to you, read it in the original document.</p>
+
+<h2>Privacy</h2>
+<p>Space Quotes <strong>collects no personal data and sets no cookies</strong>. There are no forms, no analytics and no tracking.</p>
+
+<h2>Contact</h2>
+<p>Space Quotes is written by <strong>Anthony Caracappa</strong> using tools from <a href="https://viventine.com">viventine.com</a>. Questions or corrections? Reach out via <a href="https://viventine.com">viventine.com</a> or see the <a href="/about/">about page</a>.</p>
 
 <footer><a href="/tidbits/">Browse the tidbits →</a> · spacequotes.org</footer>
 </div>
@@ -814,7 +899,9 @@ mkdirSync(join(ROOT, "tidbits"), { recursive: true });
 mkdirSync(join(ROOT, "about"), { recursive: true });
 writeFileSync(join(ROOT, "tidbits", "index.html"), feedPage(items));
 writeFileSync(join(ROOT, "about", "index.html"), aboutPage());
+mkdirSync(join(ROOT, "terms"), { recursive: true });
+writeFileSync(join(ROOT, "terms", "index.html"), termsPage());
 writeFileSync(join(ROOT, "index.html"), homePage(items, topicEntries));
 writeFileSync(join(ROOT, "feed.xml"), feedXml(items));
-writeFileSync(join(ROOT, "sitemap.xml"), sitemap(items, ["/about/", ...hubIndexUrls, ...hubUrls]));
+writeFileSync(join(ROOT, "sitemap.xml"), sitemap(items, ["/about/", "/terms/", ...hubIndexUrls, ...hubUrls]));
 console.log(`built homepage + ${items.length} tidbit(s) + ${Object.keys(byTag).length} topic + ${Object.keys(byDocket).length} docket hubs + feed + RSS + sitemap`);
