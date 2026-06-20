@@ -1,38 +1,32 @@
 ---
 slug: starcloud-datacenter
-title: "Starcloud is filing the paperwork for a data center in orbit"
+title: "Starcloud asks the FCC to license a data center in orbit for training AI"
 date: 2026-02-02
-source_label: "FCC IBFS · SAT-LOA-20260202-00073 · ITU cost-recovery declaration"
+source_label: "FCC IBFS · SAT-LOA-20260202-00073 · License application"
 source_url: "https://fccprod.servicenowservices.com/icfs?id=ibfs_application_summary&number=SAT-LOA-20260202-00073"
-quote_id: sagan-incredible
-tags: [orbital-datacenter, in-space-computing, starcloud, ngso, fcc]
+tags: [orbital-datacenter, in-space-computing, ai, starcloud, ngso, fcc]
 faq:
-  Q: What is the Starcloud Orbital Datacenter System?
-  A: A satellite network that Starcloud, Inc. plans to operate in non-geostationary orbit, named in its filings as the "Starcloud Orbital Datacenter System."
-  Q: What is this particular document?
-  A: An ITU cost-recovery declaration in which Starcloud, Inc. accepts the cost-recovery responsibilities for the system's international frequency filings under ITU Resolution 88.
-  Q: What orbit will it use?
-  A: The declaration states the system operates in non-geostationary orbit.
+  Q: What is Starcloud applying to do?
+  A: To launch and operate a constellation of satellites that function as a distributed data center in orbit, to train and run artificial intelligence models and other cloud computing services.
+  Q: How big is the system Starcloud describes?
+  A: The application states an intent to eventually deploy up to 88,000 satellites operating between 600 and 850 km in sun-synchronous orbit.
+  Q: Why put a data center in space?
+  A: The filing argues space offers near-constant solar power, radiative cooling, and the ability to scale sizes and power levels not possible on Earth.
 ---
 
-On February 2, 2026, **Starcloud, Inc.** filed an FCC satellite-network document with an
-unusually literal name: a cost-recovery declaration for the **Starcloud Orbital Datacenter
-System**, to operate in **non-geostationary orbit**. The document itself is pure procedure —
-under the ITU's Resolution 88, an operator must accept the cost of processing its international
-frequency filings, and Starcloud "unconditionally accepts all cost recovery responsibilities"
-for the system.
+Starcloud, Inc. is asking the FCC for permission to put a data center in orbit, and it is not
+thinking small. The company's February 2, 2026 license application describes a constellation
+built to "operate as a distributed datacenter to train and operate artificial intelligence
+('AI') models," and states an intent to eventually deploy "up to 88,000 satellites" between 600
+and 850 km in sun-synchronous orbit. The argument for going to space rather than building on the
+ground is physical: "near-constant solar power, radiative cooling, and the ability to scale
+sizes and power levels not possible on earth," with the satellites linked by laser.
 
-**Why it matters.** The filed name says it plainly: an "Orbital Datacenter System" — a data
-center meant to operate in space. The striking part isn't the declaration; it's how routine the
-declaration is. Putting compute in orbit has reached the stage where it clears the same dull
-cost-recovery step any satellite network has to — a quiet sign the idea is being treated as real
-infrastructure, not a thought experiment.
+Starcloud says it holds $13.1 billion in letters of interest from cloud operators. This is still
+an early-stage license request, and the constellation would rely on third-party networks to
+reach users on the ground.
 
-> "Somewhere, something incredible is waiting to be known."
-> — Carl Sagan
+> "Orbital datacenters are the only truly scalable way to meet the ever-accelerating demand for electricity to meet the coming demands for AI compute"
+> — Starcloud, FCC license application
 
-Sagan meant discovery. Starcloud's bet is that more of the knowing — the raw computation behind
-it — belongs up there, closer to the data and the unlimited dark, than in a warehouse on the
-ground.
-
-*Sources: [FCC IBFS filing →](https://fccprod.servicenowservices.com/icfs?id=ibfs_application_summary&number=SAT-LOA-20260202-00073) · Orbit Sentinel*
+*Sources: [FCC IBFS application →](https://fccprod.servicenowservices.com/icfs?id=ibfs_application_summary&number=SAT-LOA-20260202-00073) · Orbit Sentinel*

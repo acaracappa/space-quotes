@@ -4,78 +4,78 @@
     <title>Space Quotes — Tidbits</title>
     <link>https://spacequotes.org/tidbits/</link>
     <atom:link href="https://spacequotes.org/feed.xml" rel="self" type="application/rss+xml"/>
-    <description>Sourced tidbits from real FCC, ITU and FAA space filings, paired with space quotes.</description>
+    <description>Sourced tidbits from real FCC, ITU and FAA space filings, each built around a quotable line from the filing.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 20 Jun 2026 00:01:25 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 20 Jun 2026 01:58:27 GMT</lastBuildDate>
     <item>
-      <title>AST SpaceMobile just told the FCC exactly how its giant satellites will fall out of the sky</title>
+      <title>AST SpaceMobile tells the FCC how it will steer its giant satellites back down</title>
       <link>https://spacequotes.org/tidbits/ast-deorbit/</link>
       <guid isPermaLink="true">https://spacequotes.org/tidbits/ast-deorbit/</guid>
       <pubDate>Fri, 20 Feb 2026 09:00:00 GMT</pubDate>
-      <description>On February 20, 2026, AST &amp; Science, LLC (AST SpaceMobile) filed a supplement in FCC docket 25-201 detailing how it will dispose of its satellites at end of …</description>
+      <description>Before a satellite dies, someone has to plan how it falls. In a February 20, 2026 supplement to the FCC, AST &amp; Science (AST SpaceMobile) replaced a passive p…</description>
     </item>
     <item>
-      <title>Planet Labs backs the FCC's push to make licensing satellites less of a slog</title>
+      <title>Planet Labs backs faster satellite licensing, with a warning about what would still slow it down</title>
       <link>https://spacequotes.org/tidbits/planet-labs-25-306/</link>
       <guid isPermaLink="true">https://spacequotes.org/tidbits/planet-labs-25-306/</guid>
       <pubDate>Thu, 19 Feb 2026 09:00:00 GMT</pubDate>
-      <description>On February 19, 2026, Planet Labs PBC filed reply comments in FCC docket 25-306 strongly supporting the Commission's effort to &quot;modernize and streamline its …</description>
+      <description>Planet Labs wants the FCC to license satellites faster, and it has a warning about why faster licensing alone will not be enough. In reply comments filed Feb…</description>
     </item>
     <item>
-      <title>Starcloud is filing the paperwork for a data center in orbit</title>
+      <title>Starcloud asks the FCC to license a data center in orbit for training AI</title>
       <link>https://spacequotes.org/tidbits/starcloud-datacenter/</link>
       <guid isPermaLink="true">https://spacequotes.org/tidbits/starcloud-datacenter/</guid>
       <pubDate>Mon, 02 Feb 2026 09:00:00 GMT</pubDate>
-      <description>On February 2, 2026, Starcloud, Inc. filed an FCC satellite-network document with an unusually literal name: a cost-recovery declaration for the Starcloud Or…</description>
+      <description>Starcloud, Inc. is asking the FCC for permission to put a data center in orbit, and it is not thinking small. The company's February 2, 2026 license applicat…</description>
     </item>
     <item>
-      <title>Amazon wants the FCC to rewrite satellite-spectrum rules set when Ka-band was 'in its infancy'</title>
+      <title>Amazon says the FCC is sharing satellite spectrum by a yardstick from when Ka-band was 'in its infancy'</title>
       <link>https://spacequotes.org/tidbits/kuiper-gso-links/</link>
       <guid isPermaLink="true">https://spacequotes.org/tidbits/kuiper-gso-links/</guid>
       <pubDate>Thu, 29 Jan 2026 09:00:00 GMT</pubDate>
-      <description>On January 29, 2026, Kuiper Systems LLC — the Amazon satellite venture now permanently branded Amazon Leo — filed a letter in FCC docket 25-157, the Moderniz…</description>
+      <description>Amazon thinks the FCC is refereeing a modern spectrum fight with an outdated rulebook. In a January 29, 2026 letter, its Kuiper Systems unit asked the Commis…</description>
     </item>
     <item>
       <title>Rural carriers tell the FCC: don't let satellites beam over our spectrum without permission</title>
       <link>https://spacequotes.org/tidbits/cca-oppose-25-201/</link>
       <guid isPermaLink="true">https://spacequotes.org/tidbits/cca-oppose-25-201/</guid>
       <pubDate>Tue, 18 Nov 2025 09:00:00 GMT</pubDate>
-      <description>On November 18, 2025, the Competitive Carriers Association (CCA) filed an opposition in FCC docket 25-201 against the applications of AST &amp; Science, AT&amp;T, Ve…</description>
+      <description>The Competitive Carriers Association represents wireless providers that range, in its words, from &quot;small, rural carriers serving fewer than 5,000 customers&quot; …</description>
     </item>
     <item>
-      <title>SpaceX tells the FCC to throw out EchoStar's challenge to its direct-to-cell waiver</title>
+      <title>SpaceX wants EchoStar's appeal of its direct-to-cell waiver thrown out</title>
       <link>https://spacequotes.org/tidbits/spacex-oppose-23-135/</link>
       <guid isPermaLink="true">https://spacequotes.org/tidbits/spacex-oppose-23-135/</guid>
       <pubDate>Wed, 23 Apr 2025 09:00:00 GMT</pubDate>
-      <description>On April 23, 2025, SpaceX filed an opposition in FCC docket 23-135 urging the Commission to deny EchoStar's Application for Review. EchoStar had asked the FC…</description>
+      <description>EchoStar asked the FCC to reverse a waiver the agency's bureaus had granted for SpaceX's satellite-to-phone service. SpaceX notes that EchoStar was the only …</description>
     </item>
     <item>
-      <title>Astroscale asks the FCC to license an in-space refueling demonstration</title>
+      <title>Astroscale asks the FCC to license a spacecraft that refuels other satellites in orbit</title>
       <link>https://spacequotes.org/tidbits/astroscale-refueling-demo/</link>
       <guid isPermaLink="true">https://spacequotes.org/tidbits/astroscale-refueling-demo/</guid>
       <pubDate>Mon, 23 Dec 2024 09:00:00 GMT</pubDate>
-      <description>On December 23, 2024, Astroscale U.S. Inc. filed an FCC satellite license application (SAT-LOA-20241223-00298) for an unusual kind of spacecraft: not a commu…</description>
+      <description>Astroscale wants to refuel satellites in orbit, and its FCC license application spells out the hardware that would do it. The spacecraft, called APS-R (Astro…</description>
     </item>
     <item>
       <title>Amazon urges the FCC to open the 17 GHz band for satellite broadband</title>
       <link>https://spacequotes.org/tidbits/kuiper-ngso-20-330/</link>
       <guid isPermaLink="true">https://spacequotes.org/tidbits/kuiper-ngso-20-330/</guid>
       <pubDate>Tue, 24 Sep 2024 09:00:00 GMT</pubDate>
-      <description>On September 24, 2024, Kuiper Systems LLC — Amazon's satellite venture — filed an ex parte letter urging the FCC to adopt its Draft Report and Order authoriz…</description>
+      <description>Amazon wants more room for satellite broadband, and it told the FCC the homework is done. In an ex parte letter filed September 24, 2024, its Kuiper Systems …</description>
     </item>
     <item>
-      <title>Iridium asks the FCC to set a hard, NASA-based limit on satellites blowing up in orbit</title>
+      <title>Iridium joins SpaceX and Kuiper in asking the FCC for a hard limit on satellites exploding</title>
       <link>https://spacequotes.org/tidbits/iridium-debris-18-313/</link>
       <guid isPermaLink="true">https://spacequotes.org/tidbits/iridium-debris-18-313/</guid>
       <pubDate>Mon, 24 Jun 2024 09:00:00 GMT</pubDate>
-      <description>On June 24, 2024, Iridium filed a letter in FCC docket 18-313 — Mitigation of Orbital Debris in the New Space Age — urging the Commission to do something it …</description>
+      <description>Iridium wants the FCC to put a hard number on how often satellites are allowed to blow up. In a June 24, 2024 letter to the orbital-debris docket, it said it…</description>
     </item>
     <item>
-      <title>Aethero wants to launch a satellite just to prove a computer can run in orbit</title>
+      <title>Aethero wants to launch a satellite that does its computing in orbit, not on the ground</title>
       <link>https://spacequotes.org/tidbits/aethero-edge-compute/</link>
       <guid isPermaLink="true">https://spacequotes.org/tidbits/aethero-edge-compute/</guid>
       <pubDate>Mon, 11 Mar 2024 09:00:00 GMT</pubDate>
-      <description>On March 11, 2024, Aethero Space Inc. filed an FCC satellite license application for a new space station with an unusually narrow purpose. In the application…</description>
+      <description>Most satellites collect data and beam it down to be processed on the ground. Aethero wants to do the work in orbit. Its March 11, 2024 FCC license applicatio…</description>
     </item>
   </channel>
 </rss>

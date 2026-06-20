@@ -1,36 +1,32 @@
 ---
 slug: aethero-edge-compute
-title: "Aethero wants to launch a satellite just to prove a computer can run in orbit"
+title: "Aethero wants to launch a satellite that does its computing in orbit, not on the ground"
 date: 2024-03-11
 source_label: "FCC IBFS · SAT-LOA-20240311-00052 · License application"
 source_url: "https://fccprod.servicenowservices.com/icfs?id=ibfs_application_summary&number=SAT-LOA-20240311-00052"
-quote_id: armstrong-small-step
 tags: [orbital-datacenter, in-space-computing, edge-computing, aethero, fcc]
 faq:
   Q: What is Aethero applying to do?
-  A: To license a new satellite whose stated purpose is to certify a high-performance on-orbit edge computer for EESS and other on-orbit uses.
+  A: To license a 1.5U CubeSat called Deimos that carries electro-optical sensors and an onboard processor, the NXN Edge Computing Module, to certify and demonstrate high-performance on-orbit edge computing.
+  Q: What would the Deimos mission demonstrate?
+  A: How on-orbit edge computing can facilitate the efficient processing of electro-optical data onboard, producing insights for tasks like mapping and resource exploration.
   Q: What kind of FCC filing is this?
-  A: A satellite license application (FCC Form 312) for a license of a new station, filed March 11, 2024 by Aethero Space Inc.
-  Q: What is the nature of service listed?
-  A: The application lists the nature of service as "Space Operations."
+  A: A satellite license application, filed March 11, 2024 by Aethero Space Inc.
 ---
 
-On March 11, 2024, **Aethero Space Inc.** filed an FCC satellite license application for a new
-space station with an unusually narrow purpose. In the application's own words, the goal is
-**"to certify high performance on-orbit edge computer for EESS and other on-orbit"** uses — and
-the nature of service is listed simply as **"Space Operations."** In other words, the
-satellite's job is largely to prove that a serious computer can run in orbit.
+Most satellites collect data and beam it down to be processed on the ground. Aethero wants to do
+the work in orbit. Its March 11, 2024 FCC license application covers a 1.5U CubeSat called
+Deimos, carrying electro-optical sensors and what the filing calls "the most powerful onboard
+edge computer launched into space by a commercial operator," the NXN Edge Computing Module,
+rated at 100 trillion operations per second against a current standard of about 5 trillion. The
+mission, the filing says, would "demonstrate how on-orbit edge computing can facilitate the
+efficient processing of electro-optical data," producing insights onboard for tasks like mapping
+and resource exploration.
 
-**Why it matters.** Spacecraft have always done some computing onboard. The newer idea is doing
-*heavy* processing in space — crunching data where it's collected instead of beaming it all
-down to be handled on the ground. A demonstration like Aethero's is how that capability earns
-its first credentials: a small mission whose real payload is proof that the hardware survives
-and performs up there.
+The reason to bother, Aethero says, is bandwidth: doing the processing in orbit slashes how much
+raw data Deimos has to send home.
 
-> "That's one small step for man, one giant leap for mankind."
-> — Neil Armstrong
-
-A demonstration satellite is exactly that kind of small step — modest hardware whose entire
-point is to show the larger leap is possible.
+> "allows earth observation systems to reduce downlink needs by over 100x"
+> — Aethero, FCC license application
 
 *Sources: [FCC IBFS application →](https://fccprod.servicenowservices.com/icfs?id=ibfs_application_summary&number=SAT-LOA-20240311-00052) · Orbit Sentinel*

@@ -97,6 +97,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://spacequotes.org/topics/ai/</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://spacequotes.org/topics/starcloud/</loc>
     <lastmod>2026-06-20</lastmod>
     <changefreq>weekly</changefreq>

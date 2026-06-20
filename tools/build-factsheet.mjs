@@ -7,7 +7,7 @@
 //     `summary_only_claims` that must be verified against the primary PDF or dropped.
 //
 // Usage: node tools/build-factsheet.mjs <filing_id> <slug>
-import { writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { writeFileSync, readFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
@@ -105,21 +105,40 @@ if (f.summary) {
   });
 }
 
-// --- primary source PDF (for verification) ---
+// --- primary source: extract text from ALL PDF attachments into source.txt ---
+// Applications (Form 312) bundle their prose in separate Narrative/Technical attachments,
+// not the first (cover) file. Pull every PDF and concatenate, labelled by filename.
 let primary = null;
-const att = (f.attachments || [])[0];
-if (att) {
-  const pdf = await apiDownload(`/api/v1/attachments/${att.id}/download`);
-  const pdfPath = join(outDir, "source.pdf");
-  writeFileSync(pdfPath, pdf);
-  let txtPath = null;
-  try {
-    txtPath = join(outDir, "source.txt");
-    execFileSync("pdftotext", ["-layout", pdfPath, txtPath]);
-  } catch {
-    txtPath = null;
+const atts = (f.attachments || []).filter((a) => {
+  const n = (a.filename || a.name || a.title || "").toLowerCase();
+  return n.endsWith(".pdf") || !/\.(htm|html|mdb|xml|zip|kml|kmz)$/i.test(n);
+});
+if (atts.length) {
+  const sections = [];
+  const tmpPdf = join(outDir, "_att.pdf");
+  let firstPdfPath = null;
+  let totalBytes = 0;
+  const used = [];
+  for (const a of atts) {
+    let buf;
+    try { buf = await apiDownload(`/api/v1/attachments/${a.id}/download`); } catch { continue; }
+    // skip obviously-non-PDF payloads
+    if (buf.slice(0, 4).toString("latin1") !== "%PDF") continue;
+    writeFileSync(tmpPdf, buf);
+    const name = a.filename || a.name || a.title || a.id;
+    if (!firstPdfPath) { firstPdfPath = join(outDir, "source.pdf"); writeFileSync(firstPdfPath, buf); }
+    totalBytes += buf.length;
+    try {
+      const t = join(outDir, "_att.txt");
+      execFileSync("pdftotext", ["-layout", tmpPdf, t]);
+      sections.push(`===== ATTACHMENT: ${name} =====\n` + readFileSync(t, "utf8"));
+      used.push(name);
+    } catch {}
   }
-  primary = { attachment_id: att.id, pdf: "out/" + slug + "/source.pdf", text: txtPath ? "out/" + slug + "/source.txt" : null, bytes: pdf.length };
+  if (sections.length) {
+    writeFileSync(join(outDir, "source.txt"), sections.join("\n\n"));
+    primary = { attachments: used, pdf: "out/" + slug + "/source.pdf", text: "out/" + slug + "/source.txt", bytes: totalBytes };
+  }
 }
 
 const factsheet = {

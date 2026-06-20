@@ -43,9 +43,15 @@ Read `out/<slug>/factsheet.json` and `out/<slug>/source.txt`.
   claim from it (altitudes, frequencies, counts) may be used ONLY if you confirm it verbatim in
   `source.txt`. If it is not in the primary text, DROP it.
 
-### 4. Draft the tidbit (analytical format)
-Write `out/<slug>/draft.md` using ONLY trusted facts + primary-text-verified claims. Pick the
-best-fitting quote from `data/quotes.json` (pre-vetted — never invent or alter a quote). Format:
+### 4. Draft the tidbit (filing-quote format + human voice)
+Write `out/<slug>/draft.md` using ONLY trusted facts + primary-text-verified claims.
+
+**The centerpiece is a verbatim quote pulled from the filing itself** — a striking, revealing
+line the filer actually wrote. Do NOT use a famous space quote; the famous-quote library is
+retired (see memory: content-direction-v2). The pull-quote goes in a blockquote at the end with
+attribution, and must appear **verbatim** in `source.txt`. This format needs a narrative filing
+(opposition, petition, comment, ex parte, letter). If the candidate is a bare form (Form 312,
+cost-recovery declaration) with no quotable human line, it does not qualify — go back to step 1.
 
 ```
 ---
@@ -54,28 +60,32 @@ title: "<specific headline naming the actor + the action>"
 date: <filed_date>
 source_label: "<agency> · <docket> · <submission type>"
 source_url: "<source_url from factsheet>"
-quote_id: <id from data/quotes.json>
 tags: [<3-5 kebab tags>]
 faq:
   Q: <question a reader would ask>
-  A: <answer — same grounding rules: only verified facts, no new claims>
-  Q: <2-3 Q&As total, optional but recommended>
+  A: <answer — only verified facts, no new claims>
+  Q: <2-3 Q&As total>
   A: <...>
 ---
 
-<Lede graf: what happened — grounded facts only.>
+<Lede: what happened, grounded. Build it around what the filer actually said, weaving in a
+short verbatim quote. Vary the opening — do NOT start with "On <date>, <Entity> filed...">
 
-**Why it matters.** <1–3 sentences of significance + stakes/players. Analytical framing is
-allowed but introduces NO new unverifiable fact. Cite docket counts from docket_context.>
+<Second graf: stakes/context, grounded. Cite docket counts from docket_context. End on a
+concrete fact, not a flourish.>
 
-> "<quote text>"
-> — <author>
-
-<One-line bridge: metaphor connecting quote to event. Asserts no new fact.>
+> "<verbatim line pulled from the filing>"
+> — <who said it> , <agency> docket <docket>
 
 *Sources: [<primary doc> →](<source_url>) · Orbit Sentinel (docket <docket>)*
 ```
-Target ~150–200 words. Numbers, names, dates, quoted phrases must each be traceable.
+Target ~120–170 words. Every number, name, date, and quoted phrase must be traceable.
+
+**Voice rules (strict — enforced by `tools/style-check.mjs`):** no em-dashes in OUR prose
+(verbatim quotes keep theirs); no "Why it matters." label; no metaphor/poetic closers; vary
+openings; banned phrases include "isn't just… it's", "quiet sign", "unglamorous", "in plain
+terms", "the striking part", "reads as". Plain, specific, trade-reporter voice. Run
+`node tools/style-check.mjs out/<slug>/draft.md` and fix anything it flags.
 
 ### 5. Independent adversarial verification (MANDATORY)
 Spawn a fresh subagent (Agent tool, general-purpose) as an adversarial fact-checker. Give it
