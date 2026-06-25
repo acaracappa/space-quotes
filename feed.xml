@@ -6,7 +6,14 @@
     <atom:link href="https://spacequotes.org/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Sourced tidbits from real FCC, ITU and FAA space filings, each built around a quotable line from the filing.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 20 Jun 2026 12:13:22 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 25 Jun 2026 17:14:13 GMT</lastBuildDate>
+    <item>
+      <title>Sateliot asks the full FCC to overturn a one-paragraph dismissal of its satellite-IoT petition</title>
+      <link>https://spacequotes.org/tidbits/satelio-iot-services-usa-inc-23-135/</link>
+      <guid isPermaLink="true">https://spacequotes.org/tidbits/satelio-iot-services-usa-inc-23-135/</guid>
+      <pubDate>Tue, 26 May 2026 09:00:00 GMT</pubDate>
+      <description>Sateliot, the U.S. unit of a Barcelona-based satellite-IoT company, wants the full Federal Communications Commission to reverse its own Space Bureau. In an A…</description>
+    </item>
     <item>
       <title>AST SpaceMobile tells the FCC how it will steer its giant satellites back down</title>
       <link>https://spacequotes.org/tidbits/ast-deorbit/</link>
