@@ -22,7 +22,7 @@ operations over licensed spectrum without the consent of the primary licensees,"
 burden so that a rural carrier would have to prove after the fact that the satellite service
 caused a dropped call, including a dropped 911 call.
 
-CCA asked the Commission to require a complete CONUS GIA or deny the application. Docket 25-201
+CCA asked the Commission to require a Geographically Independent Area covering the continental U.S. (a "CONUS GIA"), or deny the application. Docket 25-201
 is contested: 145 filings, including 94 comments and 8 oppositions.
 
 > "form a CONUS GIA that includes CCA members as participants rather than excludes them as victims"

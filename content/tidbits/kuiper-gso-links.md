@@ -1,6 +1,6 @@
 ---
 slug: kuiper-gso-links
-title: "Amazon says the FCC is sharing satellite spectrum by a yardstick from when Ka-band was 'in its infancy'"
+title: "Amazon says the FCC is splitting satellite spectrum by rules written when Ka-band was 'in its infancy'"
 date: 2026-01-29
 source_label: "FCC ECFS · SB Docket 25-157 · Letter"
 source_url: "https://www.fcc.gov/ecfs/document/10129908013106/1"
