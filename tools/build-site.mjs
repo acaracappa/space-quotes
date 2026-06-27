@@ -9,7 +9,7 @@
 //   sitemap.xml
 //
 // Usage: node tools/build-site.mjs
-import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync, statSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync, statSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
@@ -17,19 +17,36 @@ import { execFileSync } from "node:child_process";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SITE = "https://spacequotes.org";
 const CONTENT = join(ROOT, "content", "tidbits");
-const SAME_AS = ["https://www.linkedin.com/in/acaracappa/", "https://github.com/acaracappa", "https://viventine.com"];
+
+// All outbound links to the company site live behind these constants, so the Orbit Sentinel
+// launch is a one-line change. ORBIT_SENTINEL points at the root today; flip it to the dedicated
+// landing page (e.g. `${VIVENTINE}/orbit-sentinel`) on launch day and rebuild.
+const VIVENTINE = "https://viventine.com";
+const ORBIT_SENTINEL = VIVENTINE; // ← flip on launch
+const BETA = "https://console.viventine.com";
+const sentinelUrl = (content, medium = "referral") =>
+  `${ORBIT_SENTINEL}?utm_source=spacequotes&utm_medium=${medium}&utm_campaign=orbit_sentinel&utm_content=${content}`;
+const betaUrl = (content) =>
+  `${BETA}?utm_source=spacequotes&utm_medium=referral&utm_campaign=orbit_sentinel&utm_content=${content}`;
+
+// Only generate a topic/docket hub once it has at least this many tidbits (avoids thin pages).
+const HUB_MIN = 2;
+let PROMOTED_TAGS = new Set();
+let PROMOTED_DOCKETS = new Set();
+
+const SAME_AS = ["https://www.linkedin.com/in/acaracappa/", "https://github.com/acaracappa", VIVENTINE];
 const AUTHOR = {
   "@type": "Person",
   name: "Anthony Caracappa",
   description: "Anthony Caracappa writes Space Quotes, tracking the FCC, ITU and FAA filings that shape life in orbit using tools from viventine.com.",
-  url: "https://viventine.com",
+  url: `${SITE}/about/`,
   sameAs: ["https://www.linkedin.com/in/acaracappa/", "https://github.com/acaracappa"],
 };
 const AUTHOR_NAME = "Anthony Caracappa";
 
 // Subtle, self-contained "what this runs on" note. Tells the story and gives readers a path
 // to explore or try the free beta, without a banner or hard sell.
-const BUILT_ON = `<aside style="max-width:680px;margin:46px auto 0;padding:16px 20px;border:1px solid rgba(120,150,255,.18);border-radius:14px;background:rgba(91,140,255,.05);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.65;color:#9fb0e0">Space Quotes is built on <a href="https://viventine.com" style="color:#9fbcff;text-decoration:none">Orbit Sentinel</a>, a space-regulatory data platform that tracks filings across the FCC, ITU, FAA and more. <a href="https://viventine.com" style="color:#9fbcff;text-decoration:none">Explore the data</a>, or <a href="https://console.viventine.com" style="color:#9fbcff;text-decoration:none">try the free beta</a>.</aside>`;
+const BUILT_ON = `<aside style="max-width:680px;margin:46px auto 0;padding:16px 20px;border:1px solid rgba(120,150,255,.18);border-radius:14px;background:rgba(91,140,255,.05);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.65;color:#9fb0e0">Space Quotes is built on <a href="${sentinelUrl('footer')}" style="color:#9fbcff;text-decoration:none">Orbit Sentinel</a>, a space-regulatory data platform that tracks filings across the FCC, ITU, FAA and more.</aside>`;
 
 // Tidbits now use verbatim quotes pulled from the filings themselves (see memory:
 // content-direction-v2). The famous-quote library is retired from tidbits.
@@ -48,6 +65,7 @@ const docketLabel = (d) => DOCKET_LABELS[d] || `FCC Docket ${d}`;
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const escAttr = (s) => esc(s).replace(/'/g, "&#39;");
 const ld = (obj) => `<script type="application/ld+json">${JSON.stringify(obj)}</script>`;
+const chip = (text, href) => (href ? `<a class="chiptag" href="${href}">${text}</a>` : `<span class="chiptag">${text}</span>`);
 
 // ---------- parsing ----------
 function parse(md, file) {
@@ -212,8 +230,8 @@ function page(fm, bodyHtml, pull, ogImage, desc, mtime, related, docket, faq = [
   const tags = Array.isArray(fm.tags) ? fm.tags : fm.tags ? [fm.tags] : [];
   const filedHtml =
     docket || tags.length
-      ? `<div class="filed"><span>Filed under</span>${docket ? `<a class="chiptag" href="/dockets/${docket}/">Docket ${esc(docket)}</a>` : ""}${tags
-          .map((t) => `<a class="chiptag" href="/topics/${t}/">${esc(humanizeTag(t))}</a>`)
+      ? `<div class="filed"><span>Filed under</span>${docket ? chip(`Docket ${esc(docket)}`, PROMOTED_DOCKETS.has(docket) ? `/dockets/${docket}/` : null) : ""}${tags
+          .map((t) => chip(esc(humanizeTag(t)), PROMOTED_TAGS.has(t) ? `/topics/${t}/` : null))
           .join("")}</div>`
       : "";
   const isoPub = `${fm.date}T09:00:00Z`;
@@ -454,7 +472,7 @@ function hubIndex(kind, entries) {
 }
 
 // ---------- homepage ----------
-function homePage(items, topicEntries = []) {
+function homePage(items, topicEntries = [], docketEntries = []) {
   const desc = "Space Quotes surfaces real, sourced tidbits from the FCC, ITU and FAA filings shaping life in orbit, each built around a verbatim line from the filing itself. Verified against primary documents, built to share.";
   const featured = items[0];
   const rest = items.slice(1, 7);
@@ -571,7 +589,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(120,150,255,.1);mar
 <div class="stars"></div><div class="glow"></div>
 <header><div class="shell bar">
   <div class="brand">${ICONS.star}SPACE QUOTES</div>
-  <nav class="nav"><a href="#latest">Tidbits</a><a href="/topics/">Topics</a><a href="/tidbits/">Archive</a><a href="/about/">About</a></nav>
+  <nav class="nav"><a href="#latest">Tidbits</a><a href="/topics/">Topics</a><a href="/dockets/">Dockets</a><a href="/tidbits/">Archive</a><a href="/about/">About</a></nav>
 </div></header>
 
 <main class="shell">
@@ -607,6 +625,11 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(120,150,255,.1);mar
     <div class="topics">${topicEntries.slice(0, 10).map((t) => `<a class="topic" href="/topics/${t.slug}/">${esc(t.label)} <span>${t.n}</span></a>`).join("")}</div>
   </section>` : ""}
 
+  ${docketEntries.length ? `<section id="dockets">
+    <div class="sec-h"><h2>Browse by docket</h2><a href="/dockets/">All dockets →</a></div>
+    <div class="topics">${docketEntries.slice(0, 10).map((d) => `<a class="topic" href="/dockets/${d.slug}/">${esc(d.label)} <span>${d.n}</span></a>`).join("")}</div>
+  </section>` : ""}
+
   <section id="about">
     <div class="sec-h"><h2>Sourced, verified, built to share</h2></div>
     <div class="trust">
@@ -621,7 +644,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(120,150,255,.1);mar
 
 <footer><div class="shell foot">
   <div>✦ Space Quotes — the paperwork of leaving Earth, read between the lines.</div>
-  <div><a href="/tidbits/">Tidbits</a> · <a href="/about/">About</a> · <a href="/terms/">Terms</a> · <a href="/feed.xml">RSS</a> · <a href="/sitemap.xml">Sitemap</a> · spacequotes.org</div>
+  <div><a href="/tidbits/">Tidbits</a> · <a href="/topics/">Topics</a> · <a href="/dockets/">Dockets</a> · <a href="/about/">About</a> · <a href="/terms/">Terms</a> · <a href="/feed.xml">RSS</a> · <a href="/sitemap.xml">Sitemap</a> · spacequotes.org</div>
 </div></footer>
 
 <script>
@@ -694,7 +717,7 @@ footer{margin-top:50px;padding-top:24px;border-top:1px solid #1c2138;font-family
 <p class="lede">Space Quotes turns the dense public record of space regulation into short, sourced, shareable dispatches, each built around a real line pulled from the filing itself.</p>
 
 <h2>Where the facts come from</h2>
-<p>Every tidbit is built from <strong>primary filings in the public regulatory record</strong>: the FCC (ECFS and IBFS), the ITU, the FAA, and the dockets where the future of orbit is actually argued. We surface them through <a href="https://viventine.com">Orbit Sentinel</a>, our space-regulatory data platform, which crawls and links these sources, and every tidbit links back to the original document so you can read it yourself. Orbit Sentinel is live and free during beta: you can <a href="https://viventine.com">explore the data</a> or <a href="https://console.viventine.com">try it yourself</a>.</p>
+<p>Every tidbit is built from <strong>primary filings in the public regulatory record</strong>: the FCC (ECFS and IBFS), the ITU, the FAA, and the dockets where the future of orbit is actually argued. We surface them through <a href="${sentinelUrl('about_methodology')}">Orbit Sentinel</a>, our space-regulatory data platform, which crawls and links these sources, and every tidbit links back to the original document so you can read it yourself. Orbit Sentinel is live and free during beta, so you can explore the filings yourself or <a rel="sponsored" href="${betaUrl('about_try')}">try the free beta</a>.</p>
 
 <h2>How we keep it accurate</h2>
 <p>Accuracy is the entire value of the site, so the process is built to make a wrong claim hard to publish:</p>
@@ -709,7 +732,7 @@ footer{margin-top:50px;padding-top:24px;border-top:1px solid #1c2138;font-family
 <p>A docket number is easy to ignore. The actual sentence a company, a lawyer, or a rural carrier wrote into the record is not. Pulling the real line out of the paperwork is how we make a filing readable, and worth sharing, without putting words in anyone's mouth.</p>
 
 <h2>Who writes Space Quotes</h2>
-<p>Space Quotes is written by <strong>Anthony Caracappa</strong>, who tracks the FCC, ITU and FAA filings that shape life in orbit using tools from <a href="https://viventine.com">viventine.com</a>. You can find him on <a rel="me" href="https://www.linkedin.com/in/acaracappa/">LinkedIn</a> and <a rel="me" href="https://github.com/acaracappa">GitHub</a>.</p>
+<p>Space Quotes is written by <strong>Anthony Caracappa</strong>, who tracks the FCC, ITU and FAA filings that shape life in orbit using tools from <a href="${sentinelUrl('about_byline')}">viventine.com</a>. You can find him on <a rel="me" href="https://www.linkedin.com/in/acaracappa/">LinkedIn</a> and <a rel="me" href="https://github.com/acaracappa">GitHub</a>.</p>
 
 <h2>Corrections</h2>
 <p>Found an error? Accuracy is the whole point of this site, and we'll correct or remove anything that turns out to be wrong.</p>
@@ -789,7 +812,7 @@ footer{margin-top:50px;padding-top:24px;border-top:1px solid #1c2138;font-family
 <p>Space Quotes <strong>collects no personal data and sets no cookies</strong>. There are no forms, no analytics and no tracking.</p>
 
 <h2>Contact</h2>
-<p>Space Quotes is written by <strong>Anthony Caracappa</strong> using tools from <a href="https://viventine.com">viventine.com</a>. Questions or corrections? Reach out via <a href="https://viventine.com">viventine.com</a> or see the <a href="/about/">about page</a>.</p>
+<p>Space Quotes is written by <strong>Anthony Caracappa</strong> using tools from <a href="${sentinelUrl('terms_byline')}">viventine.com</a>. Questions or corrections? Reach out via <a href="${VIVENTINE}">viventine.com</a> or see the <a href="/about/">about page</a>.</p>
 
 <footer><a href="/tidbits/">Browse the tidbits →</a> · spacequotes.org</footer>
 </div>
@@ -853,6 +876,17 @@ const items = readdirSync(CONTENT)
   .map((f) => parse(readFileSync(join(CONTENT, f), "utf8"), join(CONTENT, f)))
   .sort((a, b) => (a.fm.date < b.fm.date ? 1 : -1));
 
+// ---- group by tag/docket first, so tidbit pages know which hubs actually exist ----
+const byTag = {};
+const byDocket = {};
+for (const it of items) {
+  for (const t of Array.isArray(it.fm.tags) ? it.fm.tags : it.fm.tags ? [it.fm.tags] : []) (byTag[t] ||= []).push(it);
+  if (it.docket) (byDocket[it.docket] ||= []).push(it);
+}
+// A hub is "promoted" (gets its own page + inbound links) only at HUB_MIN+ tidbits.
+PROMOTED_TAGS = new Set(Object.keys(byTag).filter((t) => byTag[t].length >= HUB_MIN));
+PROMOTED_DOCKETS = new Set(Object.keys(byDocket).filter((d) => byDocket[d].length >= HUB_MIN));
+
 const relatedFor = (it) => {
   const same = items.filter((o) => o.fm.slug !== it.fm.slug && o.docket && o.docket === it.docket);
   const others = items.filter((o) => o.fm.slug !== it.fm.slug && !same.includes(o));
@@ -870,13 +904,7 @@ for (const it of items) {
   console.log(`  tidbits/${it.fm.slug}/`);
 }
 
-// ---- hub-and-spoke: topic + docket hubs and their indexes ----
-const byTag = {};
-const byDocket = {};
-for (const it of items) {
-  for (const t of Array.isArray(it.fm.tags) ? it.fm.tags : it.fm.tags ? [it.fm.tags] : []) (byTag[t] ||= []).push(it);
-  if (it.docket) (byDocket[it.docket] ||= []).push(it);
-}
+// ---- hub-and-spoke: topic + docket hubs (only promoted ones) and their indexes ----
 const hubUrls = [];
 const writeHub = (dir, slug, html) => {
   const d = join(ROOT, dir, slug);
@@ -884,11 +912,22 @@ const writeHub = (dir, slug, html) => {
   writeFileSync(join(d, "index.html"), html);
   hubUrls.push(`/${dir}/${slug}/`);
 };
-for (const [tag, its] of Object.entries(byTag)) writeHub("topics", tag, topicHub(tag, humanizeTag(tag), its));
-for (const [dk, its] of Object.entries(byDocket)) writeHub("dockets", dk, docketHub(dk, its));
+// Remove any previously-generated hub dirs that no longer qualify (kills stale thin pages).
+const pruneHubs = (dir, keep) => {
+  const base = join(ROOT, dir);
+  if (!existsSync(base)) return;
+  for (const name of readdirSync(base)) {
+    if (name === "index.html") continue;
+    if (!keep.has(name)) rmSync(join(base, name), { recursive: true, force: true });
+  }
+};
+for (const [tag, its] of Object.entries(byTag)) if (its.length >= HUB_MIN) writeHub("topics", tag, topicHub(tag, humanizeTag(tag), its));
+for (const [dk, its] of Object.entries(byDocket)) if (its.length >= HUB_MIN) writeHub("dockets", dk, docketHub(dk, its));
+pruneHubs("topics", PROMOTED_TAGS);
+pruneHubs("dockets", PROMOTED_DOCKETS);
 
-const topicEntries = Object.entries(byTag).map(([slug, its]) => ({ slug, label: humanizeTag(slug), n: its.length })).sort((a, b) => b.n - a.n || a.label.localeCompare(b.label));
-const docketEntries = Object.entries(byDocket).map(([slug, its]) => ({ slug, label: `Docket ${slug}`, sub: docketLabel(slug), n: its.length })).sort((a, b) => b.n - a.n || a.slug.localeCompare(b.slug));
+const topicEntries = Object.entries(byTag).filter(([, its]) => its.length >= HUB_MIN).map(([slug, its]) => ({ slug, label: humanizeTag(slug), n: its.length })).sort((a, b) => b.n - a.n || a.label.localeCompare(b.label));
+const docketEntries = Object.entries(byDocket).filter(([, its]) => its.length >= HUB_MIN).map(([slug, its]) => ({ slug, label: `Docket ${slug}`, sub: docketLabel(slug), n: its.length })).sort((a, b) => b.n - a.n || a.slug.localeCompare(b.slug));
 mkdirSync(join(ROOT, "topics"), { recursive: true });
 mkdirSync(join(ROOT, "dockets"), { recursive: true });
 writeFileSync(join(ROOT, "topics", "index.html"), hubIndex("topics", topicEntries));
@@ -901,7 +940,7 @@ writeFileSync(join(ROOT, "tidbits", "index.html"), feedPage(items));
 writeFileSync(join(ROOT, "about", "index.html"), aboutPage());
 mkdirSync(join(ROOT, "terms"), { recursive: true });
 writeFileSync(join(ROOT, "terms", "index.html"), termsPage());
-writeFileSync(join(ROOT, "index.html"), homePage(items, topicEntries));
+writeFileSync(join(ROOT, "index.html"), homePage(items, topicEntries, docketEntries));
 writeFileSync(join(ROOT, "feed.xml"), feedXml(items));
 writeFileSync(join(ROOT, "sitemap.xml"), sitemap(items, ["/about/", "/terms/", ...hubIndexUrls, ...hubUrls]));
-console.log(`built homepage + ${items.length} tidbit(s) + ${Object.keys(byTag).length} topic + ${Object.keys(byDocket).length} docket hubs + feed + RSS + sitemap`);
+console.log(`built homepage + ${items.length} tidbit(s) + ${PROMOTED_TAGS.size} topic + ${PROMOTED_DOCKETS.size} docket hubs (gated at ${HUB_MIN}+) + feed + RSS + sitemap`);
